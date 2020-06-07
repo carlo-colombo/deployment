@@ -1,0 +1,157 @@
+#@ load("@ytt:data", "data")
+#@ load("functions.star", "get_password")
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/frontend-entry-points: http,https
+    traefik.ingress.kubernetes.io/redirect-entry-point: https
+    traefik.ingress.kubernetes.io/redirect-permanent: 'true'
+  name: mywiki
+spec:
+  rules:
+    - host: #@ data.values.wiki.domain
+      http:
+        paths:
+          - backend:
+              serviceName: mywiki
+              servicePort: http
+            path: /
+  tls:
+  - hosts:
+      - #@ data.values.wiki.domain
+    secretName: tw-letsencrypt-prod-secret
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations: {}
+  name: mywiki
+  namespace: default
+spec:
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: mywiki
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations: {}
+  name: mywiki
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mywiki
+  template:
+    metadata:
+      labels:
+        app: mywiki
+    spec:
+      containers:
+        - image: elasticdog/tiddlywiki
+          name: mywiki
+          volumeMounts:
+          - name: volv
+            mountPath: /tiddlywiki
+          - name: users
+            mountPath: /tiddlywiki/creds
+          args:
+            - /tiddlywiki
+            - --listen
+            - host=0.0.0.0
+            - "username=$(USERNAME)"
+            - "password=$(PASSWORD)"
+            - credentials=creds/creds.csv
+            - "writers=$(USERS)"
+            - "readers=$(USERS)"
+            - --verbose
+          env:
+            - name: USERNAME
+              value: admin
+            - name: PASSWORD
+              value: #@ get_password(data.values.wiki.users, 'admin')
+            - name: USERS
+              value: #@ ','.join([x.username for x in data.values.wiki.users])
+      volumes:
+        - name: volv
+          persistentVolumeClaim:
+            claimName: mywiki-pvc
+        - name: users
+          secret:
+            secretName: wiki-users
+      imagePullSecrets:
+        - name: regcred
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mywiki-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: daily-wiki-backup
+spec:
+  schedule: "10 22 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          initContainers:
+          - name: prepare
+            image: elasticdog/tiddlywiki
+            args:
+              - /tiddlywiki
+              - --build
+              - index
+            volumeMounts:
+            - name: volv
+              mountPath: /tiddlywiki
+          containers:
+          - name: backup
+            image: restic/restic
+            args:
+              - -r
+              - #@ data.values.backup.destination
+              - backup 
+              - /tiddlywiki
+              - --host
+              - #@ data.values.wiki.domain
+              - --no-cache
+            volumeMounts:
+            - name: volv
+              mountPath: /tiddlywiki
+            env:
+              - name: AWS_ACCESS_KEY_ID
+                value: #@ data.values.backup.access_key
+              - name: AWS_SECRET_ACCESS_KEY
+                value: #@ data.values.backup.secret_key
+              - name: RESTIC_PASSWORD
+                value: #@ data.values.backup.password
+          restartPolicy: Never
+          volumes:
+            - name: volv
+              persistentVolumeClaim:
+                claimName: mywiki-pvc
+      backoffLimit: 4

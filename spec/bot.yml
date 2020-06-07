@@ -1,0 +1,122 @@
+#@ load("@ytt:data", "data")
+#@ load("functions.star", "get_password")
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/frontend-entry-points: http,https
+    traefik.ingress.kubernetes.io/redirect-entry-point: https
+    traefik.ingress.kubernetes.io/redirect-permanent: 'true'
+  name: bot
+spec:
+  rules:
+    - host: #@ data.values.bot.domain
+      http:
+        paths:
+          - backend:
+              serviceName: send-to-wiki
+              servicePort: http
+            path: #@  "/" + data.values.bot.token
+  tls:
+    - hosts:
+        - #@ data.values.bot.domain
+      secretName: bot-letsencrypt-prod-secret
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations: {}
+  name: send-to-wiki
+spec:
+  ports:
+    - name: http
+      port: 9021
+      targetPort: 9021
+  selector:
+    app: send-to-wiki
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations: {}
+  name: send-to-wiki
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: send-to-wiki
+  template:
+    metadata:
+      labels:
+        app: send-to-wiki
+    spec:
+      initContainers:
+        - image: send-to-wiki
+          name: set-webhook
+          args:
+            - run
+            - --allow-net
+            - --allow-env
+            - setWebhook.ts
+          env:
+            - name: TELEGRAM_TOKEN
+              value: #@ data.values.bot.token 
+            - name: BOT_URL
+              value: #@ "https://%s/%s" % (data.values.bot.domain, data.values.bot.token)
+      containers:
+        - image: extract-info
+          name: extract-info
+          env:
+            - name: PORT
+              value: '9022'
+        - image: send-to-wiki
+          name: send-to-wiki
+          env:
+            - name: PORT
+              value: '9021'
+            - name: WIKI_URL
+              value: #@ 'https://' + data.values.wiki.domain
+            - name: EXTRACT_INFO_URL
+              value: http://localhost:9022
+            - name: WIKI_USERNAME
+              value: bot
+            - name: WIKI_PASSWORD
+              value: #@ get_password(data.values.wiki.users, 'bot')
+            - name: ALLOWED_CHATS
+              value: #@ data.values.bot.allowed_chats
+#! Specifies where to find app1 image source
+---
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Sources
+sources:
+- image: send-to-wiki
+  path: send-to-wiki
+
+---
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Sources
+sources:
+- image: extract-info
+  path: extract-info
+
+#! Specifies where to push app1 image
+---
+apiVersion: kbld.k14s.io/v1alpha1
+kind: ImageDestinations
+destinations:
+- image: send-to-wiki
+  newImage: docker.io/carlocolombo/send-to-wiki
+
+#! Specifies where to push app1 image
+---
+apiVersion: kbld.k14s.io/v1alpha1
+kind: ImageDestinations
+destinations:
+- image: extract-info
+  newImage: docker.io/carlocolombo/extract-info

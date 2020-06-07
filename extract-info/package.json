@@ -1,0 +1,16 @@
+{
+  "name": "extract-info",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.mjs",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@postlight/mercury-parser": "^2.2.0",
+    "fastify": "^2.14.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node ./index.mjs"
+  }
+}
