@@ -79,7 +79,7 @@ listenAndServe(address, async (req) => {
         }
       }).then(resp => resp.json())
 
-      title = info.title
+      title = info.title || text
       log.info(`Collected information for url: ${url}, title: ${title}`)
 
       const { status } = await wiki('PUT', title, { text: text, tags: 'external' })
