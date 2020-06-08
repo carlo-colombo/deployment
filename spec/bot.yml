@@ -90,6 +90,8 @@ spec:
               value: #@ get_password(data.values.wiki.users, 'bot')
             - name: ALLOWED_CHATS
               value: #@ data.values.bot.allowed_chats
+            - name: TELEGRAM_TOKEN
+              value: #@ data.values.bot.token
 #! Specifies where to find app1 image source
 ---
 apiVersion: kbld.k14s.io/v1alpha1

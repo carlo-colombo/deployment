@@ -1,4 +1,4 @@
-import {log, listenAndServe, decoder} from "./deps.ts"
+import { log, listenAndServe, decoder } from "./deps.ts"
 
 const tagRe = /(?:^|[^\S\xA0])(?:\[\[(.*?)\]\])(?=[^\S\xA0]|$)|([\S\xA0]+)/gm
 
@@ -8,6 +8,7 @@ const USERNAME = Deno.env.get("WIKI_USERNAME")
 const PASSWORD = Deno.env.get("WIKI_PASSWORD")
 const PORT = Deno.env.get("PORT") || 8080
 const EXTRACT_INFO_URL = Deno.env.get("EXTRACT_INFO_URL") || ""
+const TELEGRAM_TOKEN = Deno.env.get("TELEGRAM_TOKEN")
 
 const address = `0.0.0.0:${PORT}`
 
@@ -64,12 +65,15 @@ listenAndServe(address, async (req) => {
 
     const urlEntity = entities && entities.find(e => e.type == "url")
 
+
     if (urlEntity) {
       const url = text.substr(urlEntity.offset, urlEntity.length)
 
+      console.log(EXTRACT_INFO_URL)
+
       const info = await fetch(EXTRACT_INFO_URL, {
         method: 'POST',
-        body: JSON.stringify({url}),
+        body: JSON.stringify({ url }),
         headers: {
           'content-type': 'application/json'
         }
@@ -81,6 +85,19 @@ listenAndServe(address, async (req) => {
       const { status } = await wiki('PUT', title, { text: text, tags: 'external' })
 
       log.info(`Creating: '${title}', response: ${status}`)
+
+      const { status: statusSend, statusText} = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+        method: 'POST',
+        body: JSON.stringify({
+          chat_id: id,
+          text: `Entry posted: ${WIKI_URL}/#${encodeURIComponent(title)}`
+        }),
+        headers: {
+          'content-type': 'application/json'
+        }
+      })
+
+      log.info(`Answering: '${title}', response: ${statusSend}, ${statusText}`)
     } else if (title != "") {
       const tiddly: {
         tags: string, title: string
@@ -95,11 +112,12 @@ listenAndServe(address, async (req) => {
       })
 
       log.info(`Response: ${status}`)
-    }else{
+    } else {
       log.info('Neither url or title to attach tags')
     }
   }
   catch (e) {
+    console.log(e)
     log.error(e)
   }
   finally {
