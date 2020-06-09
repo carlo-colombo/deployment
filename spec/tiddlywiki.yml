@@ -118,16 +118,6 @@ spec:
     spec:
       template:
         spec:
-          initContainers:
-          - name: prepare
-            image: elasticdog/tiddlywiki
-            args:
-              - /tiddlywiki
-              - --build
-              - index
-            volumeMounts:
-            - name: volv
-              mountPath: /tiddlywiki
           containers:
           - name: backup
             image: restic/restic
