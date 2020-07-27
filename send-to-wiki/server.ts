@@ -108,7 +108,7 @@ listenAndServe(address, async (req) => {
 
       const { status } = await wiki('PUT', tiddly.title, {
         ...tiddly,
-        tags: tiddly.tags + " " + text
+        tags: tiddly.tags + " " + text.toLowerCase()
       })
 
       log.info(`Response: ${status}`)
