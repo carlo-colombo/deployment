@@ -1,0 +1,80 @@
+#@ load("@ytt:data", "data")
+#@ load("functions.star", "get_password")
+
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: wiki-backup
+spec:
+  schedule: "*/10 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: backup
+            image: restic/restic
+            args:
+              - -r
+              - #@ data.values.backup.destination
+              - backup 
+              - /tiddlywiki
+              - --host
+              - #@ data.values.wiki.domain
+              - --no-cache
+            volumeMounts:
+            - name: volv
+              mountPath: /tiddlywiki
+            env:
+              - name: AWS_ACCESS_KEY_ID
+                value: #@ data.values.backup.access_key
+              - name: AWS_SECRET_ACCESS_KEY
+                value: #@ data.values.backup.secret_key
+              - name: RESTIC_PASSWORD
+                value: #@ data.values.backup.password
+          restartPolicy: Never
+          volumes:
+            - name: volv
+              persistentVolumeClaim:
+                claimName: mywiki-pvc
+      backoffLimit: 4
+
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: wiki-backup-forget
+spec:
+  schedule: "0 21 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: backup
+            image: restic/restic
+            args:
+              - -r
+              - #@ data.values.backup.destination
+              - forget
+              - -H
+              - '4'
+              - --keep-daily
+              - '7'
+              - --keep-weekly
+              - '5'
+              - --keep-monthly
+              - '12'
+              - --keep-yearly
+              - '75'
+              - --no-cache
+            env:
+              - name: AWS_ACCESS_KEY_ID
+                value: #@ data.values.backup.access_key
+              - name: AWS_SECRET_ACCESS_KEY
+                value: #@ data.values.backup.secret_key
+              - name: RESTIC_PASSWORD
+                value: #@ data.values.backup.password
+          restartPolicy: Never
+      backoffLimit: 4
