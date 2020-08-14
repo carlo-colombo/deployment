@@ -81,7 +81,7 @@ spec:
             - name: PORT
               value: '9021'
             - name: WIKI_URL
-              value: #@ 'https://' + data.values.wiki.domain
+              value: http://mywiki:8080
             - name: EXTRACT_INFO_URL
               value: http://localhost:9022
             - name: WIKI_USERNAME
