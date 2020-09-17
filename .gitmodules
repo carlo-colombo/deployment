@@ -1,0 +1,3 @@
+[submodule "tiddlywiki_bot"]
+	path = tiddlywiki_bot
+	url = git@github.com:carlo-colombo/tiddlywiki_bot.git
