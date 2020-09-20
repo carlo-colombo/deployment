@@ -46,7 +46,7 @@ kind: CronJob
 metadata:
   name: wiki-backup-forget
 spec:
-  schedule: "0 21 * * *"
+  schedule: "5 21 * * *"
   jobTemplate:
     spec:
       template:

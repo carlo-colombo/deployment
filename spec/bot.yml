@@ -20,7 +20,7 @@ spec:
           - backend:
               serviceName: send-to-wiki
               servicePort: http
-            path: #@  "/" + data.values.bot.token
+            path: /
   tls:
     - hosts:
         - #@ data.values.bot.domain
@@ -56,30 +56,19 @@ spec:
       labels:
         app: send-to-wiki
     spec:
-      initContainers:
-        - image: send-to-wiki
-          name: set-webhook
-          args:
-            - run
-            - --allow-net
-            - --allow-env
-            - setWebhook.ts
-          env:
-            - name: TELEGRAM_TOKEN
-              value: #@ data.values.bot.token 
-            - name: BOT_URL
-              value: #@ "https://%s/%s" % (data.values.bot.domain, data.values.bot.token)
       containers:
         - image: extract-info
           name: extract-info
           env:
             - name: PORT
               value: '9022'
-        - image: send-to-wiki
+        - image: tiddly_wiki_bot
           name: send-to-wiki
           env:
             - name: PORT
               value: '9021'
+            - name: WIKI_EXTERNAL_URL
+              value: #@ 'https://' + data.values.wiki.domain
             - name: WIKI_URL
               value: http://mywiki:8080
             - name: EXTRACT_INFO_URL
@@ -90,15 +79,23 @@ spec:
               value: #@ get_password(data.values.wiki.users, 'bot')
             - name: ALLOWED_CHATS
               value: #@ data.values.bot.allowed_chats
-            - name: TELEGRAM_TOKEN
+            - name: TELEGRAM_BOT_TOKEN
               value: #@ data.values.bot.token
+            - name: REGISTER_ADDRESS
+              value: https://api.telegram.org
+            - name: OWN_ADDRESS
+              value: #@ "https://%s/api/%s/hook" % (data.values.bot.domain, data.values.bot.token)
+
 #! Specifies where to find app1 image source
 ---
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Sources
 sources:
-- image: send-to-wiki
-  path: send-to-wiki
+- image: tiddly_wiki_bot
+  path: tiddly_wiki_bot
+  pack:
+    build:
+      builder: carlocolombo/elixir-builder
 
 ---
 apiVersion: kbld.k14s.io/v1alpha1
@@ -112,8 +109,8 @@ sources:
 apiVersion: kbld.k14s.io/v1alpha1
 kind: ImageDestinations
 destinations:
-- image: send-to-wiki
-  newImage: docker.io/carlocolombo/send-to-wiki
+- image: tiddly_wiki_bot
+  newImage: docker.io/carlocolombo/tiddly_wiki_bot
 
 #! Specifies where to push app1 image
 ---
