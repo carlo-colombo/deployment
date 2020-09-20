@@ -4,6 +4,7 @@ const tagRe = /(?:^|[^\S\xA0])(?:\[\[(.*?)\]\])(?=[^\S\xA0]|$)|([\S\xA0]+)/gm
 
 const ALLOWED_CHATS = Deno.env.get("ALLOWED_CHATS") || ""
 const WIKI_URL = Deno.env.get("WIKI_URL")
+const WIKI_EXTERNAL_URL = Deno.env.get("WIKI_EXTERNAL_URL")
 const USERNAME = Deno.env.get("WIKI_USERNAME")
 const PASSWORD = Deno.env.get("WIKI_PASSWORD")
 const PORT = Deno.env.get("PORT") || 8080
@@ -90,7 +91,7 @@ listenAndServe(address, async (req) => {
         method: 'POST',
         body: JSON.stringify({
           chat_id: id,
-          text: `Entry posted: ${WIKI_URL}/#${encodeURIComponent(title)}`
+          text: `Entry posted: ${WIKI_EXTERNAL_URL}/#${encodeURIComponent(title)}`
         }),
         headers: {
           'content-type': 'application/json'
