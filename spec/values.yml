@@ -1,0 +1,25 @@
+#@data/values
+---
+backup:
+  destination:
+  access_key:
+  secret_key:
+  password:
+
+wiki:
+  domain: ''
+  users: []
+
+bot:
+  allowed_chats:
+  token:
+  domain:
+certs:
+  email:
+
+passwordmanager:
+  domain:
+
+release:
+  cookie:
+  secret_key_base:

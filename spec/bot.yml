@@ -41,6 +41,19 @@ spec:
     app: send-to-wiki
 
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations: {}
+  name: dashboard
+spec:
+  ports:
+    - name: http
+      port: 4000
+      targetPort: 4000
+  selector:
+    app: send-to-wiki
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -62,9 +75,20 @@ spec:
           env:
             - name: PORT
               value: '9022'
+        - image: dashboard
+          name: dashboard
+          env:
+            - name: PORT
+              value: '4000'
+            - name: HOST
+              value: localhost
+            - name: RELEASE_COOKIE
+              value: #@ data.values.release.cookie
         - image: tiddly_wiki_bot
           name: send-to-wiki
           env:
+            - name: RELEASE_COOKIE
+              value: #@ data.values.release.cookie
             - name: PORT
               value: '9021'
             - name: WIKI_EXTERNAL_URL
@@ -101,6 +125,19 @@ sources:
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Sources
 sources:
+- image: dashboard
+  path: ../dashboard
+  pack:
+    build:
+      builder: carlocolombo/elixir-builder
+      rawOptions:
+        - -e
+        - #@ 'SECRET_KEY_BASE='+ data.values.release.secret_key_base
+
+---
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Sources
+sources:
 - image: extract-info
   path: extract-info
 
@@ -110,7 +147,14 @@ apiVersion: kbld.k14s.io/v1alpha1
 kind: ImageDestinations
 destinations:
 - image: tiddly_wiki_bot
-  newImage: docker.io/carlocolombo/tiddly_wiki_bot
+  newImage: rg.nl-ams.scw.cloud/carlo-colombo/tiddly_wiki_bot
+
+---
+apiVersion: kbld.k14s.io/v1alpha1
+kind: ImageDestinations
+destinations:
+- image: dashboard
+  newImage: rg.nl-ams.scw.cloud/carlo-colombo/dashboard
 
 #! Specifies where to push app1 image
 ---
@@ -118,4 +162,4 @@ apiVersion: kbld.k14s.io/v1alpha1
 kind: ImageDestinations
 destinations:
 - image: extract-info
-  newImage: docker.io/carlocolombo/extract-info
+  newImage: rg.nl-ams.scw.cloud/carlo-colombo/extract-info
