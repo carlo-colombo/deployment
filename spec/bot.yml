@@ -119,7 +119,7 @@ sources:
   path: tiddly_wiki_bot
   pack:
     build:
-      builder: carlocolombo/elixir-builder
+      builder: rg.nl-ams.scw.cloud/carlo-colombo/elixir-builder
 
 ---
 apiVersion: kbld.k14s.io/v1alpha1
@@ -129,7 +129,7 @@ sources:
   path: dashboard
   pack:
     build:
-      builder: carlocolombo/elixir-builder
+      builder: rg.nl-ams.scw.cloud/carlo-colombo/elixir-builder
       rawOptions:
         - -e
         - #@ 'SECRET_KEY_BASE='+ data.values.release.secret_key_base
