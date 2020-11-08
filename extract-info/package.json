@@ -12,5 +12,8 @@
   "devDependencies": {},
   "scripts": {
     "start": "node ./index.mjs"
+  },
+  "engines" : {
+    "node" : "^14.4.0"
   }
 }

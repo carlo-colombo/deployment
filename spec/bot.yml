@@ -140,6 +140,9 @@ kind: Sources
 sources:
 - image: extract-info
   path: extract-info
+  pack:
+    build:
+      builder: paketobuildpacks/builder:base
 
 #! Specifies where to push app1 image
 ---
