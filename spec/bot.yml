@@ -84,6 +84,11 @@ spec:
               value: localhost
             - name: RELEASE_COOKIE
               value: #@ data.values.release.cookie
+        - image: feed2wiki
+          name: feed2wiki
+          env:
+            - name: RELEASE_COOKIE
+              value: #@ data.values.release.cookie
         - image: tiddly_wiki_bot
           name: send-to-wiki
           env:
@@ -144,6 +149,15 @@ sources:
     build:
       builder: paketobuildpacks/builder:base
 
+---
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Sources
+sources:
+- image: feed2wiki
+  path: feed2wiki
+  pack:
+    build:
+      builder: rg.nl-ams.scw.cloud/carlo-colombo/elixir-builder
 #! Specifies where to push app1 image
 ---
 apiVersion: kbld.k14s.io/v1alpha1
@@ -159,6 +173,12 @@ destinations:
 - image: dashboard
   newImage: rg.nl-ams.scw.cloud/carlo-colombo/dashboard
 
+---
+apiVersion: kbld.k14s.io/v1alpha1
+kind: ImageDestinations
+destinations:
+- image: feed2wiki
+  newImage: rg.nl-ams.scw.cloud/carlo-colombo/feed2wiki
 #! Specifies where to push app1 image
 ---
 apiVersion: kbld.k14s.io/v1alpha1
