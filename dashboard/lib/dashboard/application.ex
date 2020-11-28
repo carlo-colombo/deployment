@@ -15,7 +15,8 @@ defmodule Dashboard.Application do
       DashboardWeb.Endpoint,
       # Start a worker by calling: Dashboard.Worker.start_link(arg)
       # {Dashboard.Worker, arg}
-      {Cluster.Supervisor, [Application.get_env(:libcluster, :topologies), [name: Dashboard.ClusterSupervisor]]}
+      {Cluster.Supervisor,
+       [Application.get_env(:libcluster, :topologies), [name: Dashboard.ClusterSupervisor]]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
