@@ -7,13 +7,13 @@
   "license": "ISC",
   "dependencies": {
     "@postlight/mercury-parser": "^2.2.0",
-    "fastify": "^2.14.1"
+    "fastify": "^3.8.0"
   },
   "devDependencies": {},
   "scripts": {
     "start": "node ./index.mjs"
   },
-  "engines" : {
-    "node" : "^14.4.0"
+  "engines": {
+    "node": "^14.4.0"
   }
 }
