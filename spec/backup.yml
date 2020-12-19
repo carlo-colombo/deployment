@@ -54,21 +54,18 @@ spec:
           containers:
           - name: backup
             image: restic/restic
+            command: ["/bin/sh"]
             args:
-              - -r
-              - #@ data.values.backup.destination
-              - forget
-              - -H
-              - '4'
-              - --keep-daily
-              - '7'
-              - --keep-weekly
-              - '5'
-              - --keep-monthly
-              - '12'
-              - --keep-yearly
-              - '75'
-              - --no-cache
+              - -c
+              - |
+                restic -r "$REPO"  forget \
+                  -H 4 \
+                  --keep-daily 7 \
+                  --keep-weekly 5 \
+                  --keep-monthly 12 \
+                  --keep-yearly 75
+
+                restic -r "$REPO" prune
             env:
               - name: AWS_ACCESS_KEY_ID
                 value: #@ data.values.backup.access_key
@@ -76,5 +73,7 @@ spec:
                 value: #@ data.values.backup.secret_key
               - name: RESTIC_PASSWORD
                 value: #@ data.values.backup.password
+              - name: REPO
+                value: #@ data.values.backup.destination
           restartPolicy: Never
       backoffLimit: 4
