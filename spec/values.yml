@@ -23,3 +23,4 @@ passwordmanager:
 release:
   cookie:
   secret_key_base:
+  deps_path:
