@@ -46,7 +46,7 @@ kind: CronJob
 metadata:
   name: wiki-backup-forget
 spec:
-  schedule: "5 21 * * *"
+  schedule: "8 21 * * *"
   jobTemplate:
     spec:
       template:
@@ -63,9 +63,9 @@ spec:
                   --keep-daily 7 \
                   --keep-weekly 5 \
                   --keep-monthly 12 \
-                  --keep-yearly 75
+                  --keep-yearly 75 \
+                  --prune
 
-                restic -r "$REPO" prune
             env:
               - name: AWS_ACCESS_KEY_ID
                 value: #@ data.values.backup.access_key
