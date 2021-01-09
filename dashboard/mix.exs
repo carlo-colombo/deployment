@@ -44,8 +44,13 @@ defmodule Dashboard.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:libcluster, "~> 3.2"}
+      {:libcluster, "~> 3.2"},
+      {:common, path: "#{local_prefix()}/common"}
     ]
+  end
+
+  defp local_prefix do
+    if Mix.env() == :prod, do: "/deps", else: ".."
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
