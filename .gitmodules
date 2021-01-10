@@ -1,6 +1,0 @@
-[submodule "tiddlywiki_bot"]
-	path = apps/tiddly_wiki_bot
-	url = git@github.com:carlo-colombo/tiddlywiki_bot.git
-[submodule "feed2wiki"]
-	path = apps/feed2wiki
-	url = git@github.com:carlo-colombo/feed2wiki.git
