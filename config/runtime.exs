@@ -15,3 +15,4 @@ config :libcluster, topologies: [
 ]
 
 config :feed2wiki, bot_name: "tiddlywiki_bot"
+
