@@ -6,7 +6,12 @@ defmodule Deployment.MixProject do
       apps_path: "apps",
       version: "0.1.0",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      releases: [
+        feed2wiki: [applications: [feed2wiki: :permanent]],
+        dashboard: [applications: [dashboard: :permanent]],
+        tiddly_wiki_bot: [applications: [tiddly_wiki_bot: :permanent]]
+      ]
     ]
   end
 
