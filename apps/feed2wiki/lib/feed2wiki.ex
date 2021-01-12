@@ -66,8 +66,17 @@ defmodule Feed2wiki do
     end
   end
 
-  defp put(tiddler) do
-    :rpc.call(bot(), TiddlyWiki, :put, [tiddler])
+  defp put(%{title: title}=tiddler) do
+    case :rpc.call(bot(), TiddlyWiki, :get, [title]) do
+      {:ok, _} ->
+        Logger.info("Entry already exists, skipping (#{title})")
+        {:ok, :skipped}
+      {:error, %{status_code: 404}}->
+        :rpc.call(bot(), TiddlyWiki, :put, [tiddler])
+      e ->
+        Loggger.info("unexpected")
+        {:ok, e}
+    end
   end
 
   defp entry_to_tiddler(entry, feed) do
