@@ -15,6 +15,12 @@ config :dashboard, DashboardWeb.Endpoint,
   pubsub_server: Dashboard.PubSub,
   live_view: [signing_salt: "7LfZaTSD"]
 
+config :tiddlywiki_bot,
+  telegram_client: Nadia,
+  tiddlywiki_client: TiddlyWiki.Client,
+  extract_info_client: ExtractInfo.Client,
+  tasks_filter: "[tag[chandler]!tag[done]]"
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

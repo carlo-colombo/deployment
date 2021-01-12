@@ -12,7 +12,6 @@ lpass show "deployments/k3s/tiddlywiki" --notes \
     | ytt -f spec/  -f - \
     --data-value release.cookie="$(random_string)" \
     --data-value release.secret_key_base="$(random_string)" \
-    --data-value release.deps_path="$(pwd)" \
     | kbld -f - \
     | kapp deploy --app tiddlywiki  \
     -f - \

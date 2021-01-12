@@ -10,7 +10,11 @@ defmodule Dashboard.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      build_path: "../../_build",
+      config_path: "../../config/config.exs",
+      deps_path: "../../deps",
+      lockfile: "../../mix.lock",
     ]
   end
 
@@ -45,12 +49,8 @@ defmodule Dashboard.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:libcluster, "~> 3.2"},
-      {:common, path: "#{local_prefix()}/common"}
+      {:common, in_umbrella: true}
     ]
-  end
-
-  defp local_prefix do
-    if Mix.env() == :prod, do: "/deps", else: ".."
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
