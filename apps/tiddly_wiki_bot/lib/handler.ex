@@ -52,10 +52,10 @@ defmodule TiddlyWikiBot.Handler do
     Agent.get(__MODULE__, &Map.get(&1, chat_id))
   end
 
-  def new_tiddler(title, text, chat_id) do
+  def new_tiddler(title, text, chat_id, n \\ 0) when n < 5 do
     case TiddlyWiki.get(title) do
       {:ok, _} ->
-        new_tiddler(title <> " - dup", text, chat_id)
+        new_tiddler(title <> " - dup", text, chat_id, n + 1)
 
       {:error, %{status_code: 404}} ->
         %TiddlyWiki.Tiddler{
@@ -68,6 +68,7 @@ defmodule TiddlyWikiBot.Handler do
         }
     end
   end
+  def new_tiddler(_,_,_,_), do: nil
 
   def get_tg_client, do: Application.get_env(:tiddlywiki_bot, :telegram_client)
   def get_tw_client, do: Application.get_env(:tiddlywiki_bot, :tiddlywiki_client)
@@ -76,7 +77,15 @@ defmodule TiddlyWikiBot.Handler do
   def init(options), do: options
 
   def call(%{body_params: update} = conn, opts) do
-    %{"message" => %{"chat" => %{"id" => chat_id}} = message} = update
+    %{
+      "message" => %{
+        "chat" => %{
+          "id" => chat_id
+        },
+        "text" => text
+      } = message} = update
+
+    Logger.info("dispatching #{text}.")
 
     module =
       cond do
