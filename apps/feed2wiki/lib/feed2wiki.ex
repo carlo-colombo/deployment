@@ -22,16 +22,7 @@ defmodule Feed2wiki do
     end
   end
 
-  defp bot do
-    {:ok, hostname} = :inet.gethostname()
-
-    [
-      Application.get_env(:feed2wiki, :bot_name),
-      hostname
-    ]
-    |> Enum.join("@")
-    |> String.to_atom()
-  end
+  defp bot, do: Application.get_env(:feed2wiki, :bot_name)
 
   def collect_feed do
     Logger.info("Collecting...")
