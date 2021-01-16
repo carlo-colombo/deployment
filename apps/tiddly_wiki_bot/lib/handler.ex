@@ -52,7 +52,8 @@ defmodule TiddlyWikiBot.Handler do
     Agent.get(__MODULE__, &Map.get(&1, chat_id))
   end
 
-  def new_tiddler(title, text, chat_id, n \\ 0) when n < 5 do
+  def new_tiddler(title, text, chat_id, n \\ 0 )
+  def new_tiddler(title, text, chat_id, n) when n < 5 do
     case TiddlyWiki.get(title) do
       {:ok, _} ->
         new_tiddler(title <> " - dup", text, chat_id, n + 1)
@@ -68,7 +69,7 @@ defmodule TiddlyWikiBot.Handler do
         }
     end
   end
-  def new_tiddler(_,_,_,_), do: nil
+  def new_tiddler(_, _, _, _), do: nil
 
   def get_tg_client, do: Application.get_env(:tiddlywiki_bot, :telegram_client)
   def get_tw_client, do: Application.get_env(:tiddlywiki_bot, :tiddlywiki_client)
