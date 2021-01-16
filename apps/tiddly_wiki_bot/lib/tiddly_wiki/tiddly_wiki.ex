@@ -38,7 +38,7 @@ defmodule TiddlyWiki do
     |> implementation().get_all(filter)
   end
 
-  def get_all() do
+  def get_all do
     from_env()
     |> implementation().get_all()
   end

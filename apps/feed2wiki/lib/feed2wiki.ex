@@ -22,7 +22,7 @@ defmodule Feed2wiki do
     end
   end
 
-  defp bot() do
+  defp bot do
     {:ok, hostname} = :inet.gethostname()
 
     [
@@ -33,7 +33,7 @@ defmodule Feed2wiki do
     |> String.to_atom()
   end
 
-  def collect_feed() do
+  def collect_feed do
     Logger.info("Collecting...")
 
     with {:ok, tiddler} <- :rpc.call(bot(), TiddlyWiki, :get, ["rssconfig"]),
