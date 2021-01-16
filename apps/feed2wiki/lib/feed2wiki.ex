@@ -15,6 +15,7 @@ defmodule Feed2wiki do
 
   def run do
     collect_feed()
+
     receive do
     after
       5 * 60_000 -> :ok
@@ -66,13 +67,15 @@ defmodule Feed2wiki do
     end
   end
 
-  defp put(%{title: title}=tiddler) do
+  defp put(%{title: title} = tiddler) do
     case :rpc.call(bot(), TiddlyWiki, :get, [title]) do
       {:ok, _} ->
         Logger.info("Entry already exists, skipping (#{title})")
         {:ok, :skipped}
-      {:error, %{status_code: 404}}->
+
+      {:error, %{status_code: 404}} ->
         :rpc.call(bot(), TiddlyWiki, :put, [tiddler])
+
       e ->
         Loggger.info("unexpected")
         {:ok, e}

@@ -11,7 +11,7 @@ defmodule Feed2wiki.MixProject do
       build_path: "../../_build",
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
-      lockfile: "../../mix.lock",
+      lockfile: "../../mix.lock"
     ]
   end
 

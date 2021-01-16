@@ -4,8 +4,7 @@
 # remember to add this file to your .gitignore.
 use Mix.Config
 
-secret_key_base =
-  System.get_env("SECRET_KEY_BASE")
+secret_key_base = System.get_env("SECRET_KEY_BASE")
 
 config :dashboard, DashboardWeb.Endpoint,
   http: [
