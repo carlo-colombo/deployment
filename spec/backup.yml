@@ -18,7 +18,7 @@ spec:
             args:
               - -r
               - #@ data.values.backup.destination
-              - backup 
+              - backup
               - /tiddlywiki
               - --host
               - #@ data.values.wiki.domain
@@ -38,6 +38,46 @@ spec:
             - name: volv
               persistentVolumeClaim:
                 claimName: mywiki-pvc
+      backoffLimit: 4
+
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: git-backup
+spec:
+  schedule: "*/33 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: backup
+            image: restic/restic
+            args:
+              - -r
+              - #@ data.values.backup.destination
+              - backup
+              - /data/git
+              - --host
+              - git
+              - --no-cache
+            volumeMounts:
+            - name: git-volume
+              mountPath: /data
+            env:
+              - name: AWS_ACCESS_KEY_ID
+                value: #@ data.values.backup.access_key
+              - name: AWS_SECRET_ACCESS_KEY
+                value: #@ data.values.backup.secret_key
+              - name: RESTIC_PASSWORD
+                value: #@ data.values.backup.password
+          restartPolicy: Never
+          volumes:
+            - name: git-volume
+              hostPath:
+                path: /data
+                type: Directory
       backoffLimit: 4
 
 ---
@@ -77,3 +117,4 @@ spec:
                 value: #@ data.values.backup.destination
           restartPolicy: Never
       backoffLimit: 4
+
