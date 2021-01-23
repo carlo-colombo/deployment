@@ -1,17 +1,9 @@
 defmodule TiddlyWikiBot.Handler do
-  use Commander
   require Logger
 
   import Plug.Conn
 
-  Module.register_attribute(__MODULE__, :commands, accumulate: true, persist: true)
 
-  dispatch to: TiddlyWikiBot.Handler do
-    command("/tasks", [], "list tasks")
-    command("/create", [:text], "create a new tiddler")
-
-    default(:default)
-  end
 
   @doc ~S"""
   iex> "_*[]()~`>#+-=|{}.!"
@@ -118,6 +110,10 @@ defmodule TiddlyWikiBot.Handler do
       error_message = "Something failed dispatching #{inspect(conn)}. Error was #{inspect(e)}"
       Logger.error(error_message)
       send_resp(conn, 200, error_message)
+  end
+
+  def list_commands do
+    []
   end
 
   defp assign_text(conn, %{"text" => text}), do: assign(conn, :text, text)

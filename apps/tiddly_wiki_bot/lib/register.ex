@@ -1,7 +1,5 @@
 require Protocol
 
-Protocol.derive(Jason.Encoder, Commander.Command, only: [:command, :description])
-
 defmodule TiddlyWikiBot.Register do
   use GenServer
   require Logger

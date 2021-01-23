@@ -29,7 +29,6 @@ defmodule TiddlywikiBot.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:jason, "~> 1.1"},
       {:nadia, "~> 0.7.0"},
-      {:commander, "~> 1.3.0"},
       {:mojito, "~> 0.7.1"},
       {:libcluster, "~> 3.2"},
       {:bypass, "2.1.0"},
