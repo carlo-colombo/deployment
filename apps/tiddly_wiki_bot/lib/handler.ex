@@ -3,8 +3,6 @@ defmodule TiddlyWikiBot.Handler do
 
   import Plug.Conn
 
-
-
   @doc ~S"""
   iex> "_*[]()~`>#+-=|{}.!"
   ...> |> TiddlyWikiBot.Handler.escape_markdown_v2
@@ -77,12 +75,9 @@ defmodule TiddlyWikiBot.Handler do
         %{
           "chat" => %{
             "id" => chat_id
-          },
-          "text" => text
+          }
         } = message
     } = update
-
-    Logger.info("dispatching #{text}.")
 
     module =
       cond do

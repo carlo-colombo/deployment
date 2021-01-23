@@ -41,7 +41,7 @@ defmodule TiddlyWikiBot.HandlerTest do
     test "send tasks to chat" do
       TiddlyWikiMock
       |> expect(:get_all, fn x, y ->
-        assert "[tag[foo]]" == y
+        assert "[tag[chandler]!tag[done]]" == y
 
         assert %TiddlyWiki{
                  username: "foo",
