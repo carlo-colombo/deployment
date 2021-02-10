@@ -1,0 +1,27 @@
+version: 2
+updates:
+- package-ecosystem: mix
+  directory: "/apps/feed2wiki"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+- package-ecosystem: mix
+  directory: "/apps/dashboard"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+- package-ecosystem: mix
+  directory: "/apps/tiddly_wiki_bot"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+- package-ecosystem: mix
+  directory: "/apps/common"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+- package-ecosystem: mix
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
