@@ -7,12 +7,8 @@ defmodule DashboardWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_dashboard_key",
-    signing_salt: "zoEj1SDu"
+    signing_salt: "WkRptAzn"
   ]
-
-  socket "/socket", DashboardWeb.UserSocket,
-    websocket: true,
-    longpoll: false
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
 
@@ -24,7 +20,7 @@ defmodule DashboardWeb.Endpoint do
     at: "/",
     from: :dashboard,
     gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
+    only: ~w(assets fonts images favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
@@ -32,6 +28,7 @@ defmodule DashboardWeb.Endpoint do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
+    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :dashboard
   end
 
   plug Phoenix.LiveDashboard.RequestLogger,

@@ -5,22 +5,19 @@ defmodule Dashboard.Application do
 
   use Application
 
+  @impl true
   def start(_type, _args) do
     children = [
+      # Start the Ecto repository
+      Dashboard.Repo,
       # Start the Telemetry supervisor
       DashboardWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: Dashboard.PubSub},
       # Start the Endpoint (http/https)
-      DashboardWeb.Endpoint,
+      DashboardWeb.Endpoint
       # Start a worker by calling: Dashboard.Worker.start_link(arg)
       # {Dashboard.Worker, arg}
-      {Cluster.Supervisor,
-       [
-         Application.get_env(:libcluster, :topologies),
-         [name: Dashboard.ClusterSupervisor]
-       ]},
-      {Common.Reconnect, Dashboard.ClusterSupervisor}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -31,6 +28,7 @@ defmodule Dashboard.Application do
 
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
+  @impl true
   def config_change(changed, _new, removed) do
     DashboardWeb.Endpoint.config_change(changed, removed)
     :ok

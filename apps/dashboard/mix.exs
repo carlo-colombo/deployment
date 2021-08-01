@@ -4,17 +4,17 @@ defmodule Dashboard.MixProject do
   def project do
     [
       app: :dashboard,
-      version: "0.1.1",
-      elixir: "~> 1.7",
-      elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
-      start_permanent: Mix.env() == :prod,
-      aliases: aliases(),
-      deps: deps(),
+      version: "0.1.0",
       build_path: "../../_build",
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
-      lockfile: "../../mix.lock"
+      lockfile: "../../mix.lock",
+      elixir: "~> 1.12",
+      elixirc_paths: elixirc_paths(Mix.env()),
+      compilers: [:gettext] ++ Mix.compilers(),
+      start_permanent: Mix.env() == :prod,
+      aliases: aliases(),
+      deps: deps()
     ]
   end
 
@@ -37,19 +37,22 @@ defmodule Dashboard.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.5.4"},
-      {:phoenix_live_view, "~> 0.15.3"},
-      {:floki, ">= 0.0.0", only: :test},
+      {:phoenix, github: "phoenixframework/phoenix", override: true},
+      {:phoenix_ecto, "~> 4.1"},
+      {:ecto_sql, "~> 3.5"},
+      # {:ecto_sqlite3, ">= 0.0.0"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_dashboard, "~> 0.4.0"},
+      {:phoenix_live_view, "~> 0.15.7"},
+      {:floki, ">= 0.30.0", only: :test},
+      {:phoenix_live_dashboard, "~> 0.4"},
+      {:esbuild, "~> 0.2", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:libcluster, "~> 3.2"},
-      {:common, in_umbrella: true}
+      {:etso, "~> 0.1.6"}
     ]
   end
 
@@ -61,7 +64,11 @@ defmodule Dashboard.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "cmd npm install --prefix assets"]
+      setup: ["deps.get", "ecto.setup"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+      "assets.deploy": ["esbuild default --minify", "phx.digest"]
     ]
   end
 end
