@@ -19,7 +19,8 @@ config :feed2wiki,
   bot_name: String.to_atom("tiddly_wiki_bot@#{hostname}")
 
 config :nadia,
-  token: System.get_env("TELEGRAM_BOT_TOKEN")
+  token: System.get_env("TELEGRAM_BOT_TOKEN"),
+  base_url: "https://api.telegram.org/bot"
 
 config :tiddlywiki_bot,
   extract_info_url: System.get_env("EXTRACT_INFO_URL"),
@@ -32,3 +33,11 @@ config :tiddlywiki_bot,
     password: System.get_env("WIKI_PASSWORD"),
     external_url: System.get_env("WIKI_EXTERNAL_URL")
   ]
+
+if config_env() == :prod do
+  IO.puts("========== prod config ================")
+
+  config :dashboard,
+         Dashboard.Repo,
+         database: System.get_env("DASHBOARD_DATABASE_PATH")
+end

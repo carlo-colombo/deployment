@@ -12,6 +12,11 @@ use Mix.Config
 config :dashboard,
   ecto_repos: [Dashboard.Repo]
 
+config :dashboard,
+       Dashboard.Repo,
+       database: "dashboard-db",
+       show_sensitive_data_on_connection_error: true
+
 # Configures the endpoint
 config :dashboard, DashboardWeb.Endpoint,
   url: [host: "localhost"],

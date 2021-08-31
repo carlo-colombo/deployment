@@ -8,6 +8,7 @@ defmodule Dashboard.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      Dashboard.Release,
       # Start the Ecto repository
       Dashboard.Repo,
       # Start the Telemetry supervisor
@@ -15,9 +16,10 @@ defmodule Dashboard.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Dashboard.PubSub},
       # Start the Endpoint (http/https)
-      DashboardWeb.Endpoint
+      DashboardWeb.Endpoint,
       # Start a worker by calling: Dashboard.Worker.start_link(arg)
       # {Dashboard.Worker, arg}
+      Dashboard.Garda
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

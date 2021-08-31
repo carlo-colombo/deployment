@@ -24,7 +24,7 @@ defmodule Dashboard.MixProject do
   def application do
     [
       mod: {Dashboard.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :telemetry]
     ]
   end
 
@@ -37,22 +37,23 @@ defmodule Dashboard.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, github: "phoenixframework/phoenix", override: true},
-      {:phoenix_ecto, "~> 4.1"},
-      {:ecto_sql, "~> 3.5"},
-      # {:ecto_sqlite3, ">= 0.0.0"},
-      {:phoenix_html, "~> 2.11"},
+      {:phoenix, "~> 1.6.0-rc.0", override: true},
+      {:phoenix_ecto, "~> 4.3"},
+      {:ecto_sql, "~> 3.6"},
+      {:ecto_sqlite3, ">= 0.0.0"},
+      {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.15.7"},
+      {:phoenix_live_view, "~> 0.16"},
       {:floki, ">= 0.30.0", only: :test},
-      {:phoenix_live_dashboard, "~> 0.4"},
+      {:phoenix_live_dashboard, "~> 0.5"},
       {:esbuild, "~> 0.2", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:etso, "~> 0.1.6"}
+      {:exsync, "~> 0.2", only: :dev},
+      {:nadia, "~> 0.7.0"}
     ]
   end
 

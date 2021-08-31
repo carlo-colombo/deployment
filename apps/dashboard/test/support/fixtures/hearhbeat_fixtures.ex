@@ -31,4 +31,18 @@ defmodule Dashboard.HearhbeatFixtures do
 
     ping
   end
+
+  @doc """
+  Generate a alarm.
+  """
+  def alarm_fixture(attrs \\ %{}) do
+    {:ok, alarm} =
+      attrs
+      |> Enum.into(%{
+        name: "some name"
+      })
+      |> Dashboard.Hearhbeat.create_alarm()
+
+    alarm
+  end
 end

@@ -108,4 +108,58 @@ defmodule Dashboard.HearhbeatTest do
       assert %Ecto.Changeset{} = Hearhbeat.change_ping(ping)
     end
   end
+
+  describe "alarms" do
+    alias Dashboard.Hearhbeat.Alarm
+
+    import Dashboard.HearhbeatFixtures
+
+    @invalid_attrs %{name: nil}
+
+    test "list_alarms/0 returns all alarms" do
+      alarm = alarm_fixture()
+      assert Hearhbeat.list_alarms() == [alarm]
+    end
+
+    test "get_alarm!/1 returns the alarm with given id" do
+      alarm = alarm_fixture()
+      assert Hearhbeat.get_alarm!(alarm.id) == alarm
+    end
+
+    test "create_alarm/1 with valid data creates a alarm" do
+      valid_attrs = %{name: "some name"}
+
+      assert {:ok, %Alarm{} = alarm} = Hearhbeat.create_alarm(valid_attrs)
+      assert alarm.name == "some name"
+    end
+
+    test "create_alarm/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Hearhbeat.create_alarm(@invalid_attrs)
+    end
+
+    test "update_alarm/2 with valid data updates the alarm" do
+      alarm = alarm_fixture()
+      update_attrs = %{name: "some updated name"}
+
+      assert {:ok, %Alarm{} = alarm} = Hearhbeat.update_alarm(alarm, update_attrs)
+      assert alarm.name == "some updated name"
+    end
+
+    test "update_alarm/2 with invalid data returns error changeset" do
+      alarm = alarm_fixture()
+      assert {:error, %Ecto.Changeset{}} = Hearhbeat.update_alarm(alarm, @invalid_attrs)
+      assert alarm == Hearhbeat.get_alarm!(alarm.id)
+    end
+
+    test "delete_alarm/1 deletes the alarm" do
+      alarm = alarm_fixture()
+      assert {:ok, %Alarm{}} = Hearhbeat.delete_alarm(alarm)
+      assert_raise Ecto.NoResultsError, fn -> Hearhbeat.get_alarm!(alarm.id) end
+    end
+
+    test "change_alarm/1 returns a alarm changeset" do
+      alarm = alarm_fixture()
+      assert %Ecto.Changeset{} = Hearhbeat.change_alarm(alarm)
+    end
+  end
 end
