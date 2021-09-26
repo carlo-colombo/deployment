@@ -5,114 +5,129 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  annotations:
-    cert-manager.io/issuer: letsencrypt-prod
-    kubernetes.io/ingress.class: traefik
-    traefik.ingress.kubernetes.io/frontend-entry-points: http,https
-    traefik.ingress.kubernetes.io/redirect-entry-point: https
-    traefik.ingress.kubernetes.io/redirect-permanent: 'true'
-  name: bot
+    annotations:
+        cert-manager.io/issuer: letsencrypt-prod
+        kubernetes.io/ingress.class: traefik
+        traefik.ingress.kubernetes.io/frontend-entry-points: http,https
+        traefik.ingress.kubernetes.io/redirect-entry-point: https
+        traefik.ingress.kubernetes.io/redirect-permanent: 'true'
+    name: bot
 spec:
-  rules:
-    - host: #@ data.values.bot.domain
-      http:
-        paths:
-          - backend:
-              serviceName: send-to-wiki
-              servicePort: http
-            path: /
-  tls:
-    - hosts:
-        - #@ data.values.bot.domain
-      secretName: bot-letsencrypt-prod-secret
+    rules:
+        - host: #@ data.values.bot.domain
+          http:
+              paths:
+                  - backend:
+                        serviceName: send-to-wiki
+                        servicePort: http
+                    path: /
+        - host: #@ data.values.dashboard.domain
+          http:
+              paths:
+                  - backend:
+                        serviceName: dashboard
+                        servicePort: http
+                    path: /
+    tls:
+        - hosts:
+              -  #@ data.values.bot.domain
+              -  #@ data.values.dashboard.domain
+          secretName: bot-letsencrypt-prod-secret
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  annotations: {}
-  name: send-to-wiki
+    annotations: {}
+    name: send-to-wiki
 spec:
-  ports:
-    - name: http
-      port: 9021
-      targetPort: 9021
-  selector:
-    app: send-to-wiki
+    ports:
+        - name: http
+          port: 9021
+          targetPort: 9021
+    selector:
+        app: send-to-wiki
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  annotations: {}
-  name: dashboard
+    annotations: {}
+    name: dashboard
 spec:
-  ports:
-    - name: http
-      port: 4000
-      targetPort: 4000
-  selector:
-    app: send-to-wiki
+    ports:
+        - name: http
+          port: 4000
+          targetPort: 4000
+    selector:
+        app: send-to-wiki
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations: {}
-  name: send-to-wiki
+    annotations: {}
+    name: send-to-wiki
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: send-to-wiki
-  template:
-    metadata:
-      labels:
-        app: send-to-wiki
-    spec:
-      containers:
-        - image: extract-info
-          name: extract-info
-          env:
-            - name: PORT
-              value: '9022'
-        - image: dashboard
-          name: dashboard
-          env:
-            - name: PORT
-              value: '4000'
-            - name: HOST
-              value: localhost
-            - name: RELEASE_COOKIE
-              value: #@ data.values.release.cookie
-        - image: feed2wiki
-          name: feed2wiki
-          env:
-            - name: RELEASE_COOKIE
-              value: #@ data.values.release.cookie
-        - image: tiddly_wiki_bot
-          name: send-to-wiki
-          env:
-            - name: RELEASE_COOKIE
-              value: #@ data.values.release.cookie
-            - name: PORT
-              value: '9021'
-            - name: WIKI_EXTERNAL_URL
-              value: #@ 'https://' + data.values.wiki.domain
-            - name: WIKI_URL
-              value: http://mywiki:8080
-            - name: EXTRACT_INFO_URL
-              value: http://localhost:9022
-            - name: WIKI_USERNAME
-              value: bot
-            - name: WIKI_PASSWORD
-              value: #@ get_password(data.values.wiki.users, 'bot')
-            - name: ALLOWED_CHATS
-              value: #@ data.values.bot.allowed_chats
-            - name: TELEGRAM_BOT_TOKEN
-              value: #@ data.values.bot.token
-            - name: REGISTER_ADDRESS
-              value: https://api.telegram.org
-            - name: OWN_ADDRESS
-              value: #@ "https://%s/api/%s/hook" % (data.values.bot.domain, data.values.bot.token)
+    replicas: 1
+    selector:
+        matchLabels:
+            app: send-to-wiki
+    template:
+        metadata:
+            labels:
+                app: send-to-wiki
+        spec:
+            containers:
+                - image: extract-info
+                  name: extract-info
+                  env:
+                      - name: PORT
+                        value: '9022'
+                - image: dashboard
+                  name: dashboard
+                  env:
+                      - name: PORT
+                        value: '4000'
+                      - name: HOST
+                        value: localhost
+                      - name: RELEASE_COOKIE
+                        value: #@ data.values.release.cookie
+                      - name: TELEGRAM_BOT_TOKEN
+                        value: #@ data.values.dashboard.token
+                      - name: DESTINATION_CHAT_ID
+                        value: #@ data.values.dashboard.allowed_chats
+                      - name: DASHBOARD_DATABASE_PATH
+                        value: /workspace/db
+
+                - image: feed2wiki
+                  name: feed2wiki
+                  env:
+                      - name: RELEASE_COOKIE
+                        value: #@ data.values.release.cookie
+                - image: tiddly_wiki_bot
+                  name: send-to-wiki
+                  env:
+                      - name: RELEASE_COOKIE
+                        value: #@ data.values.release.cookie
+                      - name: PORT
+                        value: '9021'
+                      - name: WIKI_EXTERNAL_URL
+                        value: #@ 'https://' + data.values.wiki.domain
+                      - name: WIKI_URL
+                        value: http://mywiki:8080
+                      - name: EXTRACT_INFO_URL
+                        value: http://localhost:9022
+                      - name: WIKI_USERNAME
+                        value: bot
+                      - name: WIKI_PASSWORD
+                        value: #@ get_password(data.values.wiki.users, 'bot')
+                      - name: ALLOWED_CHATS
+                        value: #@ data.values.bot.allowed_chats
+                      - name: TELEGRAM_BOT_TOKEN
+                        value: #@ data.values.bot.token
+                      - name: REGISTER_ADDRESS
+                        value: https://api.telegram.org
+                      - name: OWN_ADDRESS
+                        value: #@ "https://%s/api/%s/hook" % (data.values.bot.domain, data.values.bot.token)
 
 #! Specifies where to find app1 image source

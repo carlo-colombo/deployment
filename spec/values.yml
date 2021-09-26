@@ -1,25 +1,29 @@
 #@data/values
 ---
 backup:
-  destination:
-  access_key:
-  secret_key:
-  password:
+    destination:
+    access_key:
+    secret_key:
+    password:
 
 wiki:
-  domain: ''
-  users: []
+    domain: ''
+    users: []
 
 bot:
-  allowed_chats:
-  token:
-  domain:
+    allowed_chats:
+    token:
+    domain:
+dashboard:
+    allowed_chats:
+    token:
+    domain:
 certs:
-  email:
+    email:
 
 passwordmanager:
-  domain:
+    domain:
 
 release:
-  cookie:
-  secret_key_base:
+    cookie:
+    secret_key_base:
