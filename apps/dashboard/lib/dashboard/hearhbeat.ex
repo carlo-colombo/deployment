@@ -103,12 +103,6 @@ defmodule Dashboard.Hearhbeat do
     Ping.changeset(ping, attrs)
   end
 
-  def last_ping() do
-    Ping
-    |> last(:inserted_at)
-    |> Repo.one()
-  end
-
   def alarms_recent_than(time_ago) do
     from(a in Alarm,
       where:
@@ -146,6 +140,17 @@ defmodule Dashboard.Hearhbeat do
     recent_ping
     |> union(^recent_alarm)
     |> Repo.exists?()
+  end
+
+  def last_pings do
+    from(p in Ping,
+      left_join: a in Alarm,
+      on: a.name == p.name,
+      select: {p.name, max(p.inserted_at), max(a.inserted_at)},
+      group_by: p.name,
+      order_by: p.name
+    )
+    |> Repo.all()
   end
 
   alias Dashboard.Hearhbeat.Alarm
