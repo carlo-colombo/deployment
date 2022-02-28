@@ -35,7 +35,7 @@ defmodule TiddlywikiBot.MixProject do
       {:mox, "~> 1.0", only: :test},
       {:exsync, "~> 0.2", only: :dev},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
-      {:credo, "~> 1.5.0", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.6.4", only: [:dev, :test], runtime: false},
       {:common, in_umbrella: true}
     ]
   end
