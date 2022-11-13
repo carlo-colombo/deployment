@@ -1,0 +1,44 @@
+#@ load("@ytt:data", "data")
+#@ load("functions.star", "get_password")
+
+---
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Sources
+sources:
+- image: pixelfed2wiki
+  path: apps/pixelfed2wiki
+  pack:
+    build:
+      builder: paketobuildpacks/builder:tiny
+---
+apiVersion: kbld.k14s.io/v1alpha1
+kind: ImageDestinations
+destinations:
+- image: pixelfed2wiki
+  newImage: rg.nl-ams.scw.cloud/carlo-colombo/pixelfed2wiki
+
+---
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pixelfed-importer
+spec:
+  schedule: "42 */2 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: pixelfed2wiki
+            image: pixelfed2wiki
+            args:
+              - https://pixelfed.social/users/lit.pictures.atom
+              - http://mywiki:8080
+            env:
+              - name: WIKI_USERNAME
+                value: bot
+              - name: WIKI_PASSWORD
+                value: #@ get_password(data.values.wiki.users, 'bot')
+          restartPolicy: Never
+      backoffLimit: 4
