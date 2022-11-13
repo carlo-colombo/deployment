@@ -2,29 +2,24 @@
 #@ load("functions.star", "get_password")
 
 ---
-apiVersion: extensions/v1beta1
-kind: Ingress
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
   annotations:
-    cert-manager.io/issuer: letsencrypt-prod
-    kubernetes.io/ingress.class: traefik
-    traefik.ingress.kubernetes.io/frontend-entry-points: http,https
-    traefik.ingress.kubernetes.io/redirect-entry-point: https
-    traefik.ingress.kubernetes.io/redirect-permanent: 'true'
-  name: mywiki
+  name: ingress-all
+  namespace: default
 spec:
-  rules:
-    - host: #@ data.values.wiki.domain
-      http:
-        paths:
-          - backend:
-              serviceName: mywiki
-              servicePort: http
-            path: /
+  entryPoints:
+  - web
+  - websecure
+  routes:
+  - kind: Rule
+    match: #@ "Host(`{}`)".format(data.values.wiki.domain)
+    services:
+    - name: mywiki
+      port: 8080
   tls:
-  - hosts:
-      - #@ data.values.wiki.domain
-    secretName: tw-letsencrypt-prod-secret
+    certResolver: le
 
 ---
 apiVersion: v1

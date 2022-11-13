@@ -7,7 +7,7 @@ kind: CronJob
 metadata:
   name: wiki-backup
 spec:
-  schedule: "15 * * * *"
+  schedule: "*/23 * * * *"
   jobTemplate:
     spec:
       template:
