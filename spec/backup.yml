@@ -2,7 +2,7 @@
 #@ load("functions.star", "get_password")
 
 ---
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: wiki-backup
@@ -41,7 +41,7 @@ spec:
       backoffLimit: 4
 
 ---
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: git-backup
@@ -81,7 +81,7 @@ spec:
       backoffLimit: 4
 
 ---
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: backup-forget
