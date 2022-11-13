@@ -84,7 +84,7 @@ spec:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: wiki-backup-forget
+  name: backup-forget
 spec:
   schedule: "8 21 * * *"
   jobTemplate:
@@ -100,9 +100,9 @@ spec:
               - |
                 restic -r "$REPO"  forget \
                   -H 4 \
-                  --keep-daily 7 \
-                  --keep-weekly 5 \
-                  --keep-monthly 12 \
+                  --keep-daily 3 \
+                  --keep-weekly 3 \
+                  --keep-monthly 6 \
                   --keep-yearly 75 \
                   --prune
 
