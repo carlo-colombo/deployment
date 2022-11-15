@@ -4,22 +4,25 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/mmcdole/gofeed"
 )
 
 type Tiddler struct {
-	Title    string `json:"title"`
-	Tags     string `json:"tags"`
-	Text     string `json:"text"`
-	Pixelfed string `json:"pixelfed"`
-	err      error
-	doc      *goquery.Document
+	Title     string `json:"title"`
+	Tags      string `json:"tags"`
+	Text      string `json:"text"`
+	Pixelfed  string `json:"pixelfed"`
+	Published string `json:"published"`
+	item      gofeed.Item
+	Err       error
+	doc       *goquery.Document
 }
 
 func (t Tiddler) setTitle(title string) Tiddler {
-	if t.err != nil {
+	if t.Err != nil {
 		return t
 	}
 	t.Title = title
@@ -27,7 +30,7 @@ func (t Tiddler) setTitle(title string) Tiddler {
 }
 
 func (t Tiddler) setTags(item gofeed.Item) Tiddler {
-	if t.err != nil {
+	if t.Err != nil {
 		return t
 	}
 
@@ -45,26 +48,27 @@ func NewTiddler(item gofeed.Item) Tiddler {
 
 	if err != nil {
 		return Tiddler{
-			err: fmt.Errorf("failed to parse description: %w", err),
+			Err: fmt.Errorf("failed to parse description: %w", err),
 		}
 	}
 
-	return Tiddler{doc: doc, Pixelfed: "true"}.
+	return Tiddler{doc: doc, Pixelfed: "true", item: item}.
 		setTags(item).
 		setTitle(item.Title).
 		addImageToText(item).
-		addTitleToText(item)
+		addTitleToText(item).
+		addPublished()
 }
 
 func (t Tiddler) addImageToText(item gofeed.Item) Tiddler {
-	if t.err != nil {
+	if t.Err != nil {
 		return t
 	}
 	img := t.doc.Find("img")
 	imgContent, err := goquery.OuterHtml(img)
 
 	if err != nil {
-		return Tiddler{err: err}
+		return Tiddler{Err: err}
 	}
 
 	t.Text = t.Text + imgContent
@@ -73,12 +77,25 @@ func (t Tiddler) addImageToText(item gofeed.Item) Tiddler {
 }
 
 func (t Tiddler) addTitleToText(item gofeed.Item) Tiddler {
-	if t.err != nil {
+	if t.Err != nil {
 		return t
 	}
 	desc := t.doc.Find("p").Text()
 
 	t.Text = t.Text + desc
 
+	return t
+}
+
+func (t Tiddler) addPublished() Tiddler {
+	if t.Err != nil {
+		return t
+	}
+	p, err := time.Parse(time.RFC3339, t.item.Published)
+	if err != nil {
+		return Tiddler{Err: err}
+	}
+
+	t.Published = p.Format("20060102150405") + "000"
 	return t
 }

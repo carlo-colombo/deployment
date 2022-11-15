@@ -27,7 +27,7 @@ func main() {
 
 		err := client.CreateIfNew(tiddler)
 		if err != nil {
-			fmt.Printf("error while creating tiddler %s\n", tiddler.Title)
+			fmt.Printf("error while creating tiddler %s\n", tiddler.Err)
 			continue
 		}
 	}
