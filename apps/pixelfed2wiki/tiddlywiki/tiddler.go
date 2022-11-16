@@ -71,7 +71,7 @@ func (t Tiddler) addImageToText(item gofeed.Item) Tiddler {
 		return Tiddler{Err: err}
 	}
 
-	t.Text = t.Text + imgContent
+	t.Text += imgContent
 
 	return t
 }
@@ -82,7 +82,8 @@ func (t Tiddler) addTitleToText(item gofeed.Item) Tiddler {
 	}
 	desc := t.doc.Find("p").Text()
 
-	t.Text = t.Text + desc
+	t.Text += desc
+	t.Text += fmt.Sprintf("<br/><br/>%s", item.Link)
 
 	return t
 }
