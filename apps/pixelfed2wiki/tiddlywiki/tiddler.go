@@ -2,6 +2,7 @@ package tiddlywiki
 
 import (
 	"fmt"
+	"math"
 	"regexp"
 	"strings"
 	"time"
@@ -11,21 +12,23 @@ import (
 )
 
 type Tiddler struct {
-	Title     string `json:"title"`
-	Tags      string `json:"tags"`
-	Text      string `json:"text"`
-	Pixelfed  string `json:"pixelfed"`
-	Published string `json:"published"`
-	item      gofeed.Item
-	Err       error
-	doc       *goquery.Document
+	Title       string `json:"title"`
+	Tags        string `json:"tags"`
+	Text        string `json:"text"`
+	Pixelfed    string `json:"pixelfed"`
+	Published   string `json:"published"`
+	Image       string `json:"image"`
+	Description string `json:"description"`
+	item        gofeed.Item
+	Err         error
+	doc         *goquery.Document
 }
 
 func (t Tiddler) setTitle(title string) Tiddler {
 	if t.Err != nil {
 		return t
 	}
-	t.Title = title
+	t.Title = title[0:int(math.Min(float64(len(title)), 150))]
 	return t
 }
 
@@ -52,11 +55,11 @@ func NewTiddler(item gofeed.Item) Tiddler {
 		}
 	}
 
-	return Tiddler{doc: doc, Pixelfed: "true", item: item}.
+	return Tiddler{doc: doc, item: item}.
 		setTags(item).
 		setTitle(item.Title).
 		addImageToText(item).
-		addTitleToText(item).
+		setText(item).
 		addPublished()
 }
 
@@ -72,11 +75,12 @@ func (t Tiddler) addImageToText(item gofeed.Item) Tiddler {
 	}
 
 	t.Text += imgContent
+	t.Image = img.AttrOr("src", "")
 
 	return t
 }
 
-func (t Tiddler) addTitleToText(item gofeed.Item) Tiddler {
+func (t Tiddler) setText(item gofeed.Item) Tiddler {
 	if t.Err != nil {
 		return t
 	}
@@ -84,6 +88,9 @@ func (t Tiddler) addTitleToText(item gofeed.Item) Tiddler {
 
 	t.Text += desc
 	t.Text += fmt.Sprintf("<br/><br/>%s", item.Link)
+
+	t.Pixelfed = item.Link
+	t.Description = desc
 
 	return t
 }
