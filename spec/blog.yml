@@ -1,0 +1,109 @@
+#@ def blog_generation():
+- name: blog-generation
+  image: elasticdog/tiddlywiki
+  args:
+    - "/tiddlywiki"
+    - --verbose
+    - "--rendertiddler"
+    - "$:/core/templates/static.template.css"
+    - "static/static.css"
+    - "text/plain"
+    - "--render"
+    - "[title[Blog Index]]"
+    - "static/index.html"
+    - "text/plain"
+    - "$:/core/templates/static.tiddler.html"
+    - "--render"
+    - "[has:field[published]]"
+    - "[encodeuricomponent[]addprefix[static/]addsuffix[.html]]"
+    - "text/plain"
+    - "$:/core/templates/static.tiddler.html"
+  volumeMounts:
+  - name: volv
+    mountPath: /tiddlywiki
+  - name: blog-data
+    mountPath: /tiddlywiki/output/static
+#@ end
+
+#@ def volumes():
+- name: volv
+  persistentVolumeClaim:
+    claimName: mywiki-pvc
+- name: blog-data
+  persistentVolumeClaim:
+    claimName: blog-pvc
+#@ end
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations: {}
+  name: blog
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blog
+  template:
+    metadata:
+      labels:
+        app: blog
+    spec:
+      containers:
+      - image: caddy
+        name: blog
+        ports:
+          - containerPort: 80
+            name: http-blog
+        volumeMounts:
+        - name: blog-data
+          mountPath: /usr/share/caddy
+      initContainers: #@ blog_generation()
+      volumes: #@ volumes()
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations: {}
+  name: blog
+  namespace: default
+spec:
+  ports:
+    - name: http-blog
+      port: 8090
+      targetPort: http-blog
+  selector:
+    app: blog
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: blog-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: update-blog
+spec:
+  schedule: "*/23 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers: #@ blog_generation()
+          restartPolicy: Never
+          volumes: #@ volumes()
+      backoffLimit: 4

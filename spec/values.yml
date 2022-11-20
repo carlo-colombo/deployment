@@ -6,6 +6,8 @@ backup:
   secret_key:
   password:
 
+blog:
+  domain: ''
 wiki:
   domain: ''
   users: []

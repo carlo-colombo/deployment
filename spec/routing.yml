@@ -1,0 +1,26 @@
+#@ load("@ytt:data", "data")
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+  name: ingress-all
+  namespace: default
+spec:
+  entryPoints:
+  - web
+  - websecure
+  routes:
+  - kind: Rule
+    match: #@ "Host(`{}`)".format(data.values.wiki.domain)
+    services:
+    - name: mywiki
+      port: http
+  - kind: Rule
+    match: #@ "Host(`{}`)".format(data.values.blog.domain)
+    services:
+    - name: blog
+      port: http-blog
+  tls:
+    certResolver: le

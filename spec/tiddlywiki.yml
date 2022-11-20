@@ -2,26 +2,6 @@
 #@ load("functions.star", "get_password")
 
 ---
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  annotations:
-  name: ingress-all
-  namespace: default
-spec:
-  entryPoints:
-  - web
-  - websecure
-  routes:
-  - kind: Rule
-    match: #@ "Host(`{}`)".format(data.values.wiki.domain)
-    services:
-    - name: mywiki
-      port: 8080
-  tls:
-    certResolver: le
-
----
 apiVersion: v1
 kind: Service
 metadata:
