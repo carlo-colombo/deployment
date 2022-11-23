@@ -22,11 +22,16 @@
     - #@ template
     - "--render"
     - "[has:field[published]tags[]!regexp[pf:]]"
-    - "[encodeuricomponent[]addprefix[static/tags/]addsuffix[.html]]"
+    - "[encodeuricomponent[]addprefix[static/]addsuffix[.html]]"
     - "text/plain"
     - #@ template
     - "isTag"
     - "true"
+    - --render
+    - "[$:/plugins/sq/feeds/templates/rss]"
+    - "static/rss.xml"
+    - text/plain
+    - "$:/plugins/sq/feeds/templates/rss"
   volumeMounts:
   - name: volv
     mountPath: /tiddlywiki
