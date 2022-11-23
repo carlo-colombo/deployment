@@ -1,3 +1,5 @@
+#@ template = "$:/litapp/templates/static.tiddler.html"
+
 #@ def blog_generation():
 - name: blog-generation
   image: elasticdog/tiddlywiki
@@ -12,17 +14,35 @@
     - "[title[Blog Index]]"
     - "static/index.html"
     - "text/plain"
-    - "$:/core/templates/static.tiddler.html"
+    - #@ template
     - "--render"
     - "[has:field[published]]"
     - "[encodeuricomponent[]addprefix[static/]addsuffix[.html]]"
     - "text/plain"
-    - "$:/core/templates/static.tiddler.html"
+    - #@ template
+    - "--render"
+    - "[has:field[published]tags[]!regexp[pf:]]"
+    - "[encodeuricomponent[]addprefix[static/tags/]addsuffix[.html]]"
+    - "text/plain"
+    - #@ template
+    - "isTag"
+    - "true"
+  volumeMounts:
+  - name: volv
+    mountPath: /tiddlywiki
+- name: sync-folders
+  image: alpine
+  args:
+    - sh
+    - -c
+    - |
+      rm -rv /blog/*
+      cp -rv /tiddlywiki/output/static/* /blog
   volumeMounts:
   - name: volv
     mountPath: /tiddlywiki
   - name: blog-data
-    mountPath: /tiddlywiki/output/static
+    mountPath: /blog
 #@ end
 
 #@ def volumes():
@@ -32,6 +52,13 @@
 - name: blog-data
   persistentVolumeClaim:
     claimName: blog-pvc
+- name: config
+  configMap:
+    defaultMode: 420
+    name: caddy
+    items:
+    - key: "Caddyfile"
+      path: "Caddyfile"
 #@ end
 
 ---
@@ -60,6 +87,9 @@ spec:
         volumeMounts:
         - name: blog-data
           mountPath: /usr/share/caddy
+        - name: config
+          mountPath: /etc/caddy/Caddyfile
+          subPath: Caddyfile
       initContainers: #@ blog_generation()
       volumes: #@ volumes()
 
@@ -107,3 +137,21 @@ spec:
           restartPolicy: Never
           volumes: #@ volumes()
       backoffLimit: 4
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: caddy
+data:
+  Caddyfile: |
+    :80 {
+      # Set this path to your site's directory.
+      root * /usr/share/caddy
+
+      # Enable the static file server.
+      file_server
+
+      log {
+        output stdout
+      }
+    }
