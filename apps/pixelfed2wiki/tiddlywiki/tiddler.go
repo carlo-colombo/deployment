@@ -37,11 +37,15 @@ func (t Tiddler) setTags(item gofeed.Item) Tiddler {
 		return t
 	}
 
-	r := regexp.MustCompile("#([^ ]+)")
+	r := regexp.MustCompile(`#(\S+)`)
+
+	tags := []string{}
 
 	for _, tag := range r.FindAllStringSubmatch(item.Title, -1) {
-		t.Tags += " pf:" + tag[1]
+		tags = append(tags, "pf:"+tag[1])
 	}
+
+	t.Tags = strings.Join(tags, " ")
 
 	return t
 }
