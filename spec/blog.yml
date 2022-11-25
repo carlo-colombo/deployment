@@ -1,37 +1,10 @@
-#@ template = "$:/litapp/templates/static.tiddler.html"
-
 #@ def blog_generation():
 - name: blog-generation
   image: elasticdog/tiddlywiki
   args:
     - "/tiddlywiki"
-    - --verbose
-    - "--rendertiddler"
-    - "$:/core/templates/static.template.css"
-    - "static/static.css"
-    - "text/plain"
-    - "--render"
-    - "[title[Blog Index]]"
-    - "static/index.html"
-    - "text/plain"
-    - #@ template
-    - "--render"
-    - "[has:field[published]]"
-    - "[encodeuricomponent[]addprefix[static/]addsuffix[.html]]"
-    - "text/plain"
-    - #@ template
-    - "--render"
-    - "[has:field[published]tags[]!regexp[pf:]]"
-    - "[encodeuricomponent[]addprefix[static/]addsuffix[.html]]"
-    - "text/plain"
-    - #@ template
-    - "isTag"
-    - "true"
-    - --render
-    - "[$:/plugins/sq/feeds/templates/rss]"
-    - "static/rss.xml"
-    - text/plain
-    - "$:/plugins/sq/feeds/templates/rss"
+    - --build-tiddler
+    - "$:/litapp/blog/build-commands"
   volumeMounts:
   - name: volv
     mountPath: /tiddlywiki
