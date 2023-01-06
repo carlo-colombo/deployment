@@ -115,6 +115,7 @@ spec:
           restartPolicy: Never
           volumes: #@ volumes()
       backoffLimit: 4
+      ttlSecondsAfterFinished: #@ 24*60*60
 ---
 apiVersion: v1
 kind: ConfigMap
