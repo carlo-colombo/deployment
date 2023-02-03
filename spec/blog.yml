@@ -1,6 +1,6 @@
 #@ def blog_generation():
 - name: blog-generation
-  image: elasticdog/tiddlywiki
+  image: tiddlywiki
   args:
     - "/tiddlywiki"
     - --build-tiddler

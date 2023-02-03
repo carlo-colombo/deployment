@@ -34,7 +34,7 @@ spec:
         app: mywiki
     spec:
       containers:
-        - image: elasticdog/tiddlywiki
+        - image: tiddlywiki
           name: mywiki
           volumeMounts:
           - name: volv
@@ -81,4 +81,22 @@ spec:
   resources:
     requests:
       storage: 10Gi
-
+---
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Sources
+sources:
+- image: tiddlywiki
+  path: apps
+  docker:
+    build:
+      pull: true
+      file: Tiddlywiki.Dockerfile
+      rawOptions:
+        - "--build-arg"
+        - "TIDDLYWIKI_VERSION=5.2.5"
+---
+apiVersion: kbld.k14s.io/v1alpha1
+kind: ImageDestinations
+destinations:
+- image: tiddlywiki
+  newImage: rg.nl-ams.scw.cloud/carlo-colombo/tiddlywiki
