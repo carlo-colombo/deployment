@@ -93,7 +93,7 @@ sources:
       file: Tiddlywiki.Dockerfile
       rawOptions:
         - "--build-arg"
-        - "TIDDLYWIKI_VERSION=5.2.5"
+        - "TIDDLYWIKI_VERSION=5.2.6"
 ---
 apiVersion: kbld.k14s.io/v1alpha1
 kind: ImageDestinations
