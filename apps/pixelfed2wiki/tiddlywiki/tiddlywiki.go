@@ -26,7 +26,9 @@ func NewClient(dest string, username string, password string) TiddlywikiClient {
 
 func (tc TiddlywikiClient) decorateReq(req *http.Request) *http.Request {
 	req.Header.Add("x-requested-with", "TiddlyWiki")
-	req.SetBasicAuth(tc.username, tc.password)
+	if tc.username != "" && tc.password != "" {
+		req.SetBasicAuth(tc.username, tc.password)
+	}
 	return req
 }
 
