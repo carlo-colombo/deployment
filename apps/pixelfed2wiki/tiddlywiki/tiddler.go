@@ -51,7 +51,7 @@ func (t Tiddler) setTags(item gofeed.Item) Tiddler {
 }
 
 func NewTiddler(item gofeed.Item) Tiddler {
-	doc, err := goquery.NewDocumentFromReader(strings.NewReader(item.Description))
+	doc, err := goquery.NewDocumentFromReader(strings.NewReader(item.Content))
 
 	if err != nil {
 		return Tiddler{
