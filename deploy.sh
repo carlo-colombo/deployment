@@ -13,6 +13,7 @@ lpass show "deployments/k3s/tiddlywiki" --notes \
     --data-value release.cookie="$(random_string)" \
     --data-value release.secret_key_base="$(random_string)" \
     | kbld -f - \
+        --lock-output "images.lock"  \
     | kapp deploy --app tiddlywiki  \
     -f - \
     --diff-changes \
