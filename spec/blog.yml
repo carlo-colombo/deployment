@@ -3,8 +3,8 @@
   image: tiddlywiki
   args:
     - "/tiddlywiki"
-    - --build-tiddler
-    - "$:/litapp/blog/build-commands"
+    - --commands
+    - "[enlist:raw{$:/plugins/litapp/blog/build}]"
   volumeMounts:
   - name: volv
     mountPath: /tiddlywiki
