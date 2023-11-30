@@ -2,9 +2,6 @@ apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 minimumRequiredVersion: 0.38.1
 overrides:
-- image: alpine
-  newImage: index.docker.io/library/alpine@sha256:eece025e432126ce23f223450a0326fbebde39cdf496a85d8c016293fc851978
-  preresolved: true
 - image: caddy
   newImage: index.docker.io/library/caddy@sha256:8ad203c3e138030bb889c2bec51de287a978e9b0c85fb0f884f359ecd4067c4b
   preresolved: true

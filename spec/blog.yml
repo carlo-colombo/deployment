@@ -1,33 +1,15 @@
 #@ def blog_generation():
-- name: cleanup
-  image: alpine
-  args:
-    - sh
-    - -c
-    - |
-      rm -rv /tiddlywiki/output/*
-  volumeMounts:
-  - name: volv
-    mountPath: /tiddlywiki
 - name: blog-generation
   image: tiddlywiki
+  command: ["/bin/sh"]
   args:
-    - "/tiddlywiki"
-    - --commands
-    - "[enlist:raw{$:/plugins/litapp/blog/build}]"
-  volumeMounts:
-  - name: volv
-    mountPath: /tiddlywiki
-- name: sync-folders
-  image: alpine
-  args:
-    - sh
     - -c
     - |
       set -ex
+
       rm -rvf /data/blog
-      mkdir -pv /data/blog
-      cp -rv /tiddlywiki/output/static/* /data/blog
+      tiddlywiki "/tiddlywiki"  --output /data/blog --commands "[enlist:raw{$:/plugins/litapp/blog/build}]"
+
   volumeMounts:
   - name: volv
     mountPath: /tiddlywiki
@@ -76,7 +58,7 @@ spec:
             name: http-blog
         volumeMounts:
         - name: blog-data
-          mountPath: /usr/share/caddy
+          mountPath: /data
         - name: config
           mountPath: /etc/caddy/Caddyfile
           subPath: Caddyfile
@@ -137,7 +119,7 @@ data:
   Caddyfile: |
     :80 {
       # Set this path to your site's directory.
-      root * /usr/share/caddy/blog
+      root * /data/blog/static
 
       # Enable the static file server.
       file_server
