@@ -1,4 +1,14 @@
 #@ def blog_generation():
+- name: cleanup
+  image: alpine
+  args:
+    - sh
+    - -c
+    - |
+      rm -rv /tiddlywiki/output/*
+  volumeMounts:
+  - name: volv
+    mountPath: /tiddlywiki
 - name: blog-generation
   image: tiddlywiki
   args:
@@ -14,13 +24,15 @@
     - sh
     - -c
     - |
-      rm -rv /blog/*
-      cp -rv /tiddlywiki/output/static/* /blog
+      set -ex
+      rm -rvf /data/blog
+      mkdir -pv /data/blog
+      cp -rv /tiddlywiki/output/static/* /data/blog
   volumeMounts:
   - name: volv
     mountPath: /tiddlywiki
   - name: blog-data
-    mountPath: /blog
+    mountPath: /data
 #@ end
 
 #@ def volumes():
@@ -125,7 +137,7 @@ data:
   Caddyfile: |
     :80 {
       # Set this path to your site's directory.
-      root * /usr/share/caddy
+      root * /usr/share/caddy/blog
 
       # Enable the static file server.
       file_server
