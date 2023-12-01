@@ -40,5 +40,15 @@ spec:
                 value: bot
               - name: WIKI_PASSWORD
                 value: #@ get_password(data.values.wiki.users, 'bot')
+              - name: ACCESS_KEYID
+                valueFrom:
+                  secretKeyRef:
+                    name: litapp-blog-images-creds
+                    key: ACCESS_KEYID
+              - name: SECRET_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: litapp-blog-images-creds
+                    key: SECRET_KEY
           restartPolicy: Never
       backoffLimit: 4

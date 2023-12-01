@@ -123,6 +123,7 @@ data:
 
       # Enable the static file server.
       file_server
+      encode zstd gzip
 
       log {
         output stdout
