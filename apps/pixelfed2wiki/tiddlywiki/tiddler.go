@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"image"
 	"image/jpeg"
+	"image/png"
 	"io"
 	"math"
 	"net/http"
@@ -32,6 +34,7 @@ type Tiddler struct {
 	Err         error
 	doc         *goquery.Document
 	imageBytes  []byte
+	mimeType    string
 }
 
 func NewTiddler(item gofeed.Item) Tiddler {
@@ -64,6 +67,7 @@ func (t Tiddler) getImage() Tiddler {
 	if err != nil {
 		return Tiddler{Err: fmt.Errorf("cannot retrieve image '%s': %w", t.Image, err)}
 	}
+	defer resp.Body.Close()
 
 	imageBytes, err := io.ReadAll(resp.Body)
 
@@ -72,6 +76,8 @@ func (t Tiddler) getImage() Tiddler {
 	}
 
 	t.imageBytes = imageBytes
+	t.mimeType = http.DetectContentType(imageBytes)
+
 	return t
 }
 
@@ -79,7 +85,7 @@ func (t Tiddler) UploadAndSetImage(mc *minio.Client) Tiddler {
 	if t.Err != nil {
 		return t
 	}
-	info, err := mc.PutObject(context.TODO(), "images", fmt.Sprintf("%s.jpg", uuid.New().String()),
+	info, err := mc.PutObject(context.TODO(), "images", uuid.New().String(),
 		bytes.NewReader(t.imageBytes), int64(len(t.imageBytes)), minio.PutObjectOptions{
 			CacheControl: "max-age=604800, must-revalidate",
 		})
@@ -153,7 +159,17 @@ func (t Tiddler) UploadAndSetThumbnail(mc *minio.Client) Tiddler {
 		return t
 	}
 
-	img, err := jpeg.Decode(bytes.NewReader(t.imageBytes))
+	var img image.Image
+	var err error
+
+	switch t.mimeType {
+	case "image/png":
+		img, err = png.Decode(bytes.NewReader(t.imageBytes))
+	case "image/jpeg":
+		img, err = jpeg.Decode(bytes.NewReader(t.imageBytes))
+	default:
+		err = fmt.Errorf("mimetype not recognized %s", t.mimeType)
+	}
 
 	if err != nil {
 		return Tiddler{Err: fmt.Errorf("cannot decode image: %w", err)}
@@ -169,7 +185,7 @@ func (t Tiddler) UploadAndSetThumbnail(mc *minio.Client) Tiddler {
 		return Tiddler{Err: fmt.Errorf("cannot encode image: %w", err)}
 	}
 
-	info, err := mc.PutObject(context.TODO(), "thumbs", fmt.Sprintf("%s.jpg", uuid.New().String()),
+	info, err := mc.PutObject(context.TODO(), "thumbs", fmt.Sprintf("%s", uuid.New().String()),
 		buf, int64(buf.Len()), minio.PutObjectOptions{
 			CacheControl: "max-age=604800, must-revalidate",
 		})
