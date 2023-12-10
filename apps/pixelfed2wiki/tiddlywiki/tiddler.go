@@ -34,7 +34,7 @@ type Tiddler struct {
 	imageBytes  []byte
 }
 
-func NewTiddler(mc *minio.Client, item gofeed.Item) Tiddler {
+func NewTiddler(item gofeed.Item) Tiddler {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(item.Content))
 
 	if err != nil {
@@ -48,9 +48,7 @@ func NewTiddler(mc *minio.Client, item gofeed.Item) Tiddler {
 		setTags(item).
 		setTitle(item.Title).
 		setText(item).
-		addPublished().
-		uploadAndSetImage(mc).
-		uploadAndSetThumbnail(mc)
+		addPublished()
 }
 
 func (t Tiddler) getImage() Tiddler {
@@ -77,12 +75,14 @@ func (t Tiddler) getImage() Tiddler {
 	return t
 }
 
-func (t Tiddler) uploadAndSetImage(mc *minio.Client) Tiddler {
+func (t Tiddler) UploadAndSetImage(mc *minio.Client) Tiddler {
 	if t.Err != nil {
 		return t
 	}
 	info, err := mc.PutObject(context.TODO(), "images", fmt.Sprintf("%s.jpg", uuid.New().String()),
-		bytes.NewReader(t.imageBytes), int64(len(t.imageBytes)), minio.PutObjectOptions{})
+		bytes.NewReader(t.imageBytes), int64(len(t.imageBytes)), minio.PutObjectOptions{
+			CacheControl: "max-age=604800, must-revalidate",
+		})
 
 	if err != nil {
 		return Tiddler{Err: fmt.Errorf("cannot upload image: %w", err)}
@@ -148,7 +148,7 @@ func (t Tiddler) addPublished() Tiddler {
 	return t
 }
 
-func (t Tiddler) uploadAndSetThumbnail(mc *minio.Client) Tiddler {
+func (t Tiddler) UploadAndSetThumbnail(mc *minio.Client) Tiddler {
 	if t.Err != nil {
 		return t
 	}
@@ -170,7 +170,9 @@ func (t Tiddler) uploadAndSetThumbnail(mc *minio.Client) Tiddler {
 	}
 
 	info, err := mc.PutObject(context.TODO(), "thumbs", fmt.Sprintf("%s.jpg", uuid.New().String()),
-		buf, int64(buf.Len()), minio.PutObjectOptions{})
+		buf, int64(buf.Len()), minio.PutObjectOptions{
+			CacheControl: "max-age=604800, must-revalidate",
+		})
 
 	if err != nil {
 		return Tiddler{Err: fmt.Errorf("cannot upload thumbnail: %w", err)}

@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+
+	"github.com/minio/minio-go/v7"
 )
 
 type TiddlywikiClient struct {
@@ -32,7 +34,7 @@ func (tc TiddlywikiClient) decorateReq(req *http.Request) *http.Request {
 	return req
 }
 
-func (tc TiddlywikiClient) CreateIfNew(tiddler Tiddler) error {
+func (tc TiddlywikiClient) CreateIfNew(mc *minio.Client, tiddler Tiddler) error {
 	path := fmt.Sprintf("%s/recipes/default/tiddlers/%s",
 		tc.dest,
 		url.PathEscape(tiddler.Title))
@@ -49,6 +51,14 @@ func (tc TiddlywikiClient) CreateIfNew(tiddler Tiddler) error {
 	if err != nil || resp.StatusCode != 404 {
 		fmt.Printf("(%d)skipping creation %s \n", resp.StatusCode, tiddler.Title)
 		return nil
+	}
+
+	tiddler = tiddler.
+		UploadAndSetImage(mc).
+		UploadAndSetThumbnail(mc)
+
+	if tiddler.Err != nil {
+		return fmt.Errorf("failed to finalize tiddler: %w", tiddler.Err)
 	}
 
 	tjson, err := json.Marshal(tiddler)

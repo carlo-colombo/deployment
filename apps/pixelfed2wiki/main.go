@@ -38,11 +38,15 @@ func main() {
 		os.Getenv("WIKI_PASSWORD"))
 
 	for _, value := range feed.Items {
-		tiddler := tiddlywiki.NewTiddler(minioClient, *value)
+		tiddler := tiddlywiki.NewTiddler(*value)
 
-		err := client.CreateIfNew(tiddler)
-		if err != nil {
+		if tiddler.Err != nil {
 			fmt.Printf("error while creating tiddler %s\n", tiddler.Err)
+			continue
+		}
+		err := client.CreateIfNew(minioClient, tiddler)
+		if err != nil {
+			fmt.Printf("error while saving tiddler: %s\n", err)
 			continue
 		}
 	}
