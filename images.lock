@@ -1,16 +1,16 @@
 apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
-minimumRequiredVersion: 0.38.1
+minimumRequiredVersion: 0.39.0
 overrides:
 - image: caddy
-  newImage: index.docker.io/library/caddy@sha256:9eb928f0a3142d0a38e6d457f7696c08c13e070d49d6499cc5b0afe644ecb281
+  newImage: index.docker.io/library/caddy@sha256:d8d3637a26f50bf0bd27a6151d2bd4f7a9f0455936fe7ca2498abbc2e26c841e
   preresolved: true
 - image: pixelfed2wiki
-  newImage: rg.nl-ams.scw.cloud/carlo-colombo/pixelfed2wiki@sha256:1232d9986d29746ad35bceb5cc5def5d2587376ee3f3ab5ba3aef3a7397b9dc5
+  newImage: rg.nl-ams.scw.cloud/carlo-colombo/pixelfed2wiki@sha256:0fde3df30ded607c8ed515e80c50000ec4fff511eef32a6fd83961976578c328
   preresolved: true
 - image: restic/restic
-  newImage: index.docker.io/restic/restic@sha256:875f41cdfd308881652b2db300e83a4682b12716735ea109e5f9217dd4714ef2
+  newImage: index.docker.io/restic/restic@sha256:515f103b95198c1f536cd1793c3dcac247ad498702b0b5522419c28652cc397b
   preresolved: true
 - image: tiddlywiki
-  newImage: rg.nl-ams.scw.cloud/carlo-colombo/tiddlywiki@sha256:fabcaf5e1dce8706118254cf12f31f1c4908ea6a6771aeea7ab416bf26f50372
+  newImage: rg.nl-ams.scw.cloud/carlo-colombo/tiddlywiki@sha256:6dfa2f229a0238dc05d3c6d733f5f2c87a695a68185de024883070c43b8c8e8b
   preresolved: true
