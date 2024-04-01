@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"os"
 
+	"github.com/carlo-colombo/pixelfed2wiki/uploader"
 	"github.com/minio/minio-go/v7"
 )
 
@@ -53,9 +55,19 @@ func (tc TiddlywikiClient) CreateIfNew(mc *minio.Client, tiddler Tiddler) error 
 		return nil
 	}
 
+	uploader := uploader.NewUploader(
+		os.Getenv("UPLOAD_BUCKET"),
+		mc,
+		tiddler.imageBytes,
+	)
+
+	if uploader.Err != nil {
+		return fmt.Errorf("failed to instantiate uploader: %w", uploader.Err)
+	}
+
 	tiddler = tiddler.
-		UploadAndSetImage(mc).
-		UploadAndSetThumbnail(mc)
+		UploadAndSetImage(uploader).
+		UploadAndSetThumbnail(uploader)
 
 	if tiddler.Err != nil {
 		return fmt.Errorf("failed to finalize tiddler: %w", tiddler.Err)

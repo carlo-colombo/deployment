@@ -50,5 +50,7 @@ spec:
                   secretKeyRef:
                     name: litapp-blog-images-creds
                     key: SECRET_KEY
+              - name: UPLOAD_BUCKET
+                value: litapp-blog-images
           restartPolicy: Never
       backoffLimit: 4

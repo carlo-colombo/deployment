@@ -22,7 +22,7 @@ func main() {
 	}
 
 	minioClient, err := minio.New(
-		"litapp-blog-images.s3.nl-ams.scw.cloud", &minio.Options{
+		"s3.nl-ams.scw.cloud", &minio.Options{
 			Creds: credentials.NewStaticV4(
 				os.Getenv("ACCESS_KEYID"),
 				os.Getenv("SECRET_KEY"), ""),

@@ -1,12 +1,7 @@
 package tiddlywiki
 
 import (
-	"bytes"
-	"context"
 	"fmt"
-	"image"
-	"image/jpeg"
-	"image/png"
 	"io"
 	"math"
 	"net/http"
@@ -15,10 +10,8 @@ import (
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/google/uuid"
-	"github.com/minio/minio-go/v7"
+	"github.com/carlo-colombo/pixelfed2wiki/uploader"
 	"github.com/mmcdole/gofeed"
-	"github.com/nfnt/resize"
 )
 
 type Tiddler struct {
@@ -81,20 +74,30 @@ func (t Tiddler) getImage() Tiddler {
 	return t
 }
 
-func (t Tiddler) UploadAndSetImage(mc *minio.Client) Tiddler {
+func (t Tiddler) UploadAndSetImage(u uploader.Uploader) Tiddler {
 	if t.Err != nil {
 		return t
 	}
-	info, err := mc.PutObject(context.TODO(), "images", uuid.New().String(),
-		bytes.NewReader(t.imageBytes), int64(len(t.imageBytes)), minio.PutObjectOptions{
-			CacheControl: "max-age=604800, must-revalidate",
-		})
 
+	imageUrl, err := u.UploadImage()
 	if err != nil {
 		return Tiddler{Err: fmt.Errorf("cannot upload image: %w", err)}
 	}
 
-	t.Image = fmt.Sprintf("%s/images/%s", mc.EndpointURL(), info.Key)
+	t.Image = imageUrl
+	return t
+}
+func (t Tiddler) UploadAndSetThumbnail(u uploader.Uploader) Tiddler {
+	if t.Err != nil {
+		return t
+	}
+
+	imageUrl, err := u.UploadThumbnail()
+	if err != nil {
+		return Tiddler{Err: fmt.Errorf("cannot upload thumbnail: %w", err)}
+	}
+
+	t.Thumbnail = imageUrl
 	return t
 }
 
@@ -151,50 +154,5 @@ func (t Tiddler) addPublished() Tiddler {
 	}
 
 	t.Published = p.Format("20060102150405") + "000"
-	return t
-}
-
-func (t Tiddler) UploadAndSetThumbnail(mc *minio.Client) Tiddler {
-	if t.Err != nil {
-		return t
-	}
-
-	var img image.Image
-	var err error
-
-	switch t.mimeType {
-	case "image/png":
-		img, err = png.Decode(bytes.NewReader(t.imageBytes))
-	case "image/jpeg":
-		img, err = jpeg.Decode(bytes.NewReader(t.imageBytes))
-	default:
-		err = fmt.Errorf("mimetype not recognized %s", t.mimeType)
-	}
-
-	if err != nil {
-		return Tiddler{Err: fmt.Errorf("cannot decode image: %w", err)}
-	}
-
-	thumb := resize.Thumbnail(360, 360, img, resize.Lanczos2)
-
-	buf := bytes.NewBuffer([]byte{})
-
-	err = jpeg.Encode(buf, thumb, nil)
-
-	if err != nil {
-		return Tiddler{Err: fmt.Errorf("cannot encode image: %w", err)}
-	}
-
-	info, err := mc.PutObject(context.TODO(), "thumbs", fmt.Sprintf("%s", uuid.New().String()),
-		buf, int64(buf.Len()), minio.PutObjectOptions{
-			CacheControl: "max-age=604800, must-revalidate",
-		})
-
-	if err != nil {
-		return Tiddler{Err: fmt.Errorf("cannot upload thumbnail: %w", err)}
-	}
-
-	t.Thumbnail = fmt.Sprintf("%s/thumbs/%s", mc.EndpointURL(), info.Key)
-
 	return t
 }
