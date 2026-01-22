@@ -6,9 +6,8 @@ function random_string {
   base32 --wrap=0 /dev/urandom | head -c 80
 }
 
-lpass sync
 
-lpass show "deployments/k3s/tiddlywiki" --notes \
+cat .creds.yml \
     | ytt -f spec/  -f - \
     --data-value release.cookie="$(random_string)" \
     --data-value release.secret_key_base="$(random_string)" \
