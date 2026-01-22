@@ -7,9 +7,9 @@ kind: Sources
 sources:
 - image: pixelfed2wiki
   path: apps/pixelfed2wiki
-  pack:
+  ko:
     build:
-      builder: paketobuildpacks/builder:tiny
+      importpath: .
 ---
 apiVersion: kbld.k14s.io/v1alpha1
 kind: ImageDestinations
