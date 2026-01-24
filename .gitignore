@@ -26,3 +26,5 @@ feed2wiki-*.tar
 
 # Temporary files for e.g. tests
 /tmp
+.creds.yml
+.envrc
