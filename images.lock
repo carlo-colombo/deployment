@@ -6,7 +6,7 @@ overrides:
   newImage: index.docker.io/library/caddy@sha256:2adb640cdc0ce1d8870887c30af1e21edfb3cdfd8433431b2a15f40119a7d654
   preresolved: true
 - image: pixelfed2wiki
-  newImage: rg.nl-ams.scw.cloud/carlo-colombo/pixelfed2wiki@sha256:e163387dd000ec354dab3b605c1d7ad1be86304db58288cca2e7209f17ebf910
+  newImage: rg.nl-ams.scw.cloud/carlo-colombo/pixelfed2wiki@sha256:41b48c2ff703254d342b1edaa837a4890de5185e358582e7e316c9c83fc8199e
   preresolved: true
 - image: restic/restic:latest
   newImage: index.docker.io/restic/restic@sha256:63e86f6726e2afcd49c882d2fc67ae483a38a1ffcb50cbf5f474bd11f5129217
