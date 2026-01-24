@@ -67,7 +67,15 @@ The project uses the Carvel suite for deployment:
   - List apps: `kapp list`
 
 ### Secrets & Config
-- **Secrets:** Never commit raw secrets. Use `.creds.yml` (git-ignored) which is merged via `ytt`.
+- **Secrets:** We now use `git-crypt` to manage encrypted secrets within the repository. The `.creds.yml` file, which contains sensitive configurations, should be encrypted using `git-crypt` and committed.
+  - **Setup:**
+    1.  Install `git-crypt` (e.g., `brew install git-crypt` on macOS, `sudo apt-get install git-crypt` on Debian/Ubuntu).
+    2.  Initialize `git-crypt` in your repository: `git crypt init`.
+    3.  Add GPG keys or a symmetric key for decryption. For GPG: `git crypt add-gpg-user <YOUR_GPG_KEY_ID>`. For a symmetric key: `git crypt export-key /path/to/key`.
+    4.  Create a `.gitattributes` file (if it doesn't exist) and add `path/to/.creds.yml filter=git-crypt diff=git-crypt` to it.
+    5.  Commit `.gitattributes`.
+    6.  Encrypt `.creds.yml`: `echo "mysecret: value"` > `.creds.yml` followed by `git add .creds.yml && git commit -m "Add encrypted credentials"`.
+    7.  To decrypt, ensure your GPG key is available or the symmetric key is exported and run `git crypt unlock`. The `deploy.sh` script will attempt to unlock automatically if `git-crypt` is set up.
 - **Certificates:** Managed via Traefik's ACME (Let's Encrypt) resolver named `le`.
 
 ---
