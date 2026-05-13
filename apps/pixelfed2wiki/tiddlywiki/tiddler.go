@@ -30,31 +30,41 @@ type Tiddler struct {
 	mimeType    string
 }
 
-func NewTiddler(item gofeed.Item) Tiddler {
+func NewTiddlers(item gofeed.Item) []Tiddler {
 	doc, err := goquery.NewDocumentFromReader(strings.NewReader(item.Content))
 
 	if err != nil {
-		return Tiddler{
+		return []Tiddler{{
 			Err: fmt.Errorf("failed to parse description: %w", err),
-		}
+		}}
 	}
 
-	return Tiddler{doc: doc, item: item}.
-		getImage().
-		setTags(item).
-		setTitle(item.Title).
-		setText(item).
-		addPublished()
+	var tiddlers []Tiddler
+	doc.Find("img").Each(func(i int, s *goquery.Selection) {
+		src, _ := s.Attr("src")
+		suffix := ""
+		if i > 0 {
+			suffix = fmt.Sprintf(" /%d", i+1)
+		}
+
+		t := Tiddler{doc: doc, item: item}.
+			fetchImage(src).
+			setTags(item).
+			setTitle(item.Title, suffix).
+			setText(item).
+			addPublished()
+		tiddlers = append(tiddlers, t)
+	})
+
+	return tiddlers
 }
 
-func (t Tiddler) getImage() Tiddler {
+func (t Tiddler) fetchImage(imageUrl string) Tiddler {
 	if t.Err != nil {
 		return t
 	}
 
-	img := t.doc.Find("img")
-
-	t.Image = img.AttrOr("src", "")
+	t.Image = imageUrl
 
 	resp, err := http.Get(t.Image)
 	if err != nil {
@@ -87,6 +97,7 @@ func (t Tiddler) UploadAndSetImage(u uploader.Uploader) Tiddler {
 	t.Image = imageUrl
 	return t
 }
+
 func (t Tiddler) UploadAndSetThumbnail(u uploader.Uploader) Tiddler {
 	if t.Err != nil {
 		return t
@@ -101,11 +112,12 @@ func (t Tiddler) UploadAndSetThumbnail(u uploader.Uploader) Tiddler {
 	return t
 }
 
-func (t Tiddler) setTitle(title string) Tiddler {
+func (t Tiddler) setTitle(title string, suffix string) Tiddler {
 	if t.Err != nil {
 		return t
 	}
-	t.Title = title[0:int(math.Min(float64(len(title)), 150))]
+	limit := 150 - len(suffix)
+	t.Title = title[0:int(math.Min(float64(len(title)), float64(limit)))] + suffix
 	return t
 }
 
