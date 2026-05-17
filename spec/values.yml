@@ -8,6 +8,9 @@ backup:
 
 blog:
   domain: ''
+  stats:
+    domain: ''
+    password_hash: ''
 wiki:
   domain: ''
   users: []
