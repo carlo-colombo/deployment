@@ -8,10 +8,16 @@ function random_string {
 
 
 function unlock_credentials {
+  local key_file="/tmp/downloads/deployment.git-crypt-key"
   if command -v git-crypt &> /dev/null; then
     if git-crypt status &> /dev/null; then
-      echo "git-crypt detected and initialized. Attempting to unlock credentials..."
-      git-crypt unlock || { echo "Failed to unlock credentials. Ensure GIT_CRYPT_KEY is set or key file is present."; exit 1; }
+      if [ -f "$key_file" ]; then
+        echo "git-crypt detected. Attempting to unlock credentials using key file: $key_file"
+        git-crypt unlock "$key_file" || { echo "Failed to unlock credentials with key file."; exit 1; }
+      else
+        echo "git-crypt detected. Attempting to unlock credentials using default method (environment or local key)..."
+        git-crypt unlock || { echo "Failed to unlock credentials. Ensure GIT_CRYPT_KEY is set or key file is present."; exit 1; }
+      fi
     else
       echo "git-crypt detected but not initialized in this repository. Skipping unlock."
     fi
