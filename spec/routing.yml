@@ -22,5 +22,10 @@ spec:
     services:
     - name: blog
       port: http-blog
+  - kind: Rule
+    match: #@ "Host(`{}`)".format(data.values.blog.stats.domain)
+    services:
+    - name: blog
+      port: http-blog
   tls:
     certResolver: le

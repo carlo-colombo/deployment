@@ -1,3 +1,31 @@
+#@ load("@ytt:data", "data")
+
+#@ def caddyfile():
+#@   lines = [
+#@     "http://" + data.values.blog.domain + " {",
+#@     "  root * /data/blog/static",
+#@     "  file_server",
+#@     "  encode zstd gzip",
+#@     "  log {",
+#@     "    output file /data/logs/access.log {",
+#@     "      roll_size 100mb",
+#@     "      roll_keep 5",
+#@     "    }",
+#@     "  }",
+#@     "}",
+#@     "",
+#@     "http://" + data.values.blog.stats.domain + " {",
+#@     "  basicauth * {",
+#@     "    admin " + data.values.blog.stats.password_hash,
+#@     "  }",
+#@     "  root * /data/stats",
+#@     "  file_server",
+#@     "  encode zstd gzip",
+#@     "}"
+#@   ]
+#@   return "\n".join(lines)
+#@ end
+
 #@ def blog_generation():
 - name: blog-generation
   image: tiddlywiki
@@ -6,7 +34,7 @@
     - -c
     - |
       set -ex
-
+      mkdir -p /data/logs /data/stats /data/db
       rm -rvf /data/blog
       tiddlywiki "/tiddlywiki"  --output /data/blog --commands "[enlist:raw{$:/plugins/litapp/blog/build}]"
 
@@ -111,21 +139,43 @@ spec:
       backoffLimit: 4
       ttlSecondsAfterFinished: #@ 24*60*60
 ---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: generate-stats
+spec:
+  schedule: "*/10 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: goaccess
+            image: allinurl/goaccess
+            command: ["/bin/sh"]
+            args:
+              - -c
+              - |
+                if [ -f /data/logs/access.log ]; then
+                  goaccess /data/logs/access.log \
+                    --log-format=CADDY \
+                    --output=/data/stats/index.html \
+                    --persist \
+                    --restore \
+                    --db-path=/data/db \
+                    --no-global-config
+                else
+                  echo "No log file found at /data/logs/access.log"
+                fi
+            volumeMounts:
+            - name: blog-data
+              mountPath: /data
+          restartPolicy: OnFailure
+          volumes: #@ volumes()
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: caddy
 data:
-  Caddyfile: |
-    :80 {
-      # Set this path to your site's directory.
-      root * /data/blog/static
-
-      # Enable the static file server.
-      file_server
-      encode zstd gzip
-
-      log {
-        output stdout
-      }
-    }
+  Caddyfile: #@ caddyfile()
