@@ -2,6 +2,11 @@
 
 #@ def caddyfile():
 #@   lines = [
+#@     "{",
+#@     "  servers {",
+#@     "    trusted_proxies static 10.42.0.0/16 10.43.0.0/16",
+#@     "  }",
+#@     "}",
 #@     "http://" + data.values.blog.domain + " {",
 #@     "  root * /data/blog/static",
 #@     "  file_server",
