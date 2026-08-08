@@ -11,6 +11,7 @@ blog:
   stats:
     domain: ''
     password_hash: ''
+    grafana_password: ''
 wiki:
   domain: ''
   users: []

@@ -1,4 +1,5 @@
 #@ load("@ytt:data", "data")
+#@ load("@ytt:overlay", "overlay")
 
 #@ def caddyfile():
 #@   lines = [
@@ -20,6 +21,7 @@
 #@     "      roll_size 100mb",
 #@     "      roll_keep 5",
 #@     "    }",
+#@     "    format json",
 #@     "  }",
 #@     "}",
 #@     "",
@@ -27,9 +29,8 @@
 #@     "  basicauth * {",
 #@     "    admin " + data.values.blog.stats.password_hash,
 #@     "  }",
-#@     "  root * /data/stats",
-#@     "  file_server",
 #@     "  encode zstd gzip",
+#@     "  reverse_proxy 127.0.0.1:3000",
 #@     "}"
 #@   ]
 #@   return "\n".join(lines)
@@ -68,6 +69,20 @@
     items:
     - key: "Caddyfile"
       path: "Caddyfile"
+- name: grafana-datasources
+  configMap:
+    defaultMode: 420
+    name: grafana-datasources
+- name: grafana-dashboards
+  configMap:
+    defaultMode: 420
+    name: grafana-dashboards
+- name: grafana-dashboard-json
+  configMap:
+    defaultMode: 420
+    name: grafana-dashboard-json
+- name: grafana-plugins
+  emptyDir: {}
 #@ end
 
 ---
@@ -87,6 +102,8 @@ spec:
       labels:
         app: blog
     spec:
+      securityContext:
+        fsGroup: 472
       containers:
       - image: caddy
         name: blog
@@ -99,6 +116,40 @@ spec:
         - name: config
           mountPath: /etc/caddy/Caddyfile
           subPath: Caddyfile
+      - image: grafana/grafana-oss:latest
+        name: grafana
+        ports:
+          - containerPort: 3000
+            name: http-grafana
+        env:
+          - name: GF_LOG_LEVEL
+            value: debug
+          - name: GF_PATHS_DATA
+            value: /data/grafana
+          - name: GF_SERVER_ROOT_URL
+            value: #@ "https://" + data.values.blog.stats.domain
+          - name: GF_AUTH_ANONYMOUS_ENABLED
+            value: "true"
+          - name: GF_AUTH_ANONYMOUS_ORG_ROLE
+            value: Viewer
+          - name: GF_SECURITY_ADMIN_USER
+            value: admin
+          - name: GF_SECURITY_ADMIN_PASSWORD
+            value: #@ data.values.blog.stats.grafana_password
+        volumeMounts:
+        - name: blog-data
+          mountPath: /data
+        - name: grafana-plugins
+          mountPath: /var/lib/grafana/plugins
+        - name: grafana-datasources
+          mountPath: /etc/grafana/provisioning/datasources
+          readOnly: true
+        - name: grafana-dashboards
+          mountPath: /etc/grafana/provisioning/dashboards
+          readOnly: true
+        - name: grafana-dashboard-json
+          mountPath: /var/lib/grafana/dashboards
+          readOnly: true
       initContainers: #@ blog_generation()
       volumes: #@ volumes()
 
@@ -151,31 +202,72 @@ spec:
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: generate-stats
+  name: load-stats
 spec:
   schedule: "*/10 * * * *"
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
         spec:
           containers:
-          - name: goaccess
-            image: allinurl/goaccess
+          - name: load-stats
+            image: python:3-alpine
             command: ["/bin/sh"]
             args:
               - -c
               - |
-                if [ -f /data/logs/access.log ]; then
-                  goaccess /data/logs/access.log \
-                    --log-format=CADDY \
-                    --output=/data/stats/index.html \
-                    --persist \
-                    --restore \
-                    --db-path=/data/db \
-                    --no-global-config
-                else
-                  echo "No log file found at /data/logs/access.log"
-                fi
+                python3 /dev/stdin <<'EOF'
+                import json, os, sqlite3, time
+                LOG='/data/logs/access.log'
+                DB='/data/stats/access.db'
+                os.makedirs(os.path.dirname(DB), exist_ok=True)
+                con=sqlite3.connect(DB)
+                cur=con.cursor()
+                cur.execute('CREATE TABLE IF NOT EXISTS access(ts INTEGER, remote_ip TEXT, method TEXT, uri TEXT, status INTEGER, size INTEGER, user_agent TEXT, referer TEXT)')
+                cur.execute('CREATE INDEX IF NOT EXISTS idx_ts ON access(ts)')
+                cur.execute('CREATE TABLE IF NOT EXISTS meta(k TEXT PRIMARY KEY, v TEXT)')
+                cur.execute("INSERT OR IGNORE INTO meta(k,v) VALUES('offset','0')")
+                off=int(cur.execute("SELECT v FROM meta WHERE k='offset'").fetchone()[0])
+                if not os.path.exists(LOG):
+                    print('no log file found at', LOG)
+                    con.close()
+                    raise SystemExit(0)
+                if off > os.path.getsize(LOG):
+                    print('log rotated, resetting offset')
+                    off=0
+                f=open(LOG,'rb')
+                f.seek(off)
+                n=0
+                for raw in f:
+                    line=raw.decode('utf-8', errors='replace').strip()
+                    if not line:
+                        continue
+                    try:
+                        j=json.loads(line)
+                    except Exception:
+                        continue
+                    req=j.get('request') or {}
+                    hdrs=req.get('headers') or {}
+                    def h(name):
+                        v=hdrs.get(name)
+                        return v[0] if isinstance(v,list) and v else (v or None)
+                    try:
+                        cur.execute('INSERT INTO access(ts,remote_ip,method,uri,status,size,user_agent,referer) VALUES(?,?,?,?,?,?,?,?)',
+                            (int(float(j.get('ts') or 0)), req.get('remote_ip'), req.get('method'), req.get('uri'),
+                             j.get('status'), j.get('size'), h('User-Agent'), h('Referer')))
+                        n+=1
+                    except Exception as e:
+                        print('err', e)
+                        continue
+                now=int(time.time())
+                cur.execute('DELETE FROM access WHERE ts < ?', (now - 120*86400,))
+                cur.execute("UPDATE meta SET v=? WHERE k='offset'", (str(f.tell()),))
+                con.commit()
+                f.close()
+                con.close()
+                print('inserted', n)
+                EOF
             volumeMounts:
             - name: blog-data
               mountPath: /data
@@ -188,3 +280,180 @@ metadata:
   name: caddy
 data:
   Caddyfile: #@ caddyfile()
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources
+data:
+  datasources.yaml: |
+    apiVersion: 1
+    datasources:
+      - name: sqlite
+        uid: sqlite
+        type: frser-sqlite-datasource
+        access: proxy
+        isDefault: true
+        editable: false
+        jsonData:
+          path: /data/stats/access.db
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards
+data:
+  dashboards.yaml: |
+    apiVersion: 1
+    providers:
+      - name: sqlite
+        orgId: 1
+        folder: ''
+        type: file
+        disableDeletion: true
+        updateIntervalSeconds: 60
+        options:
+          path: /var/lib/grafana/dashboards
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-json
+data:
+  blog-stats.json: |
+    {
+      "title": "Blog Stats",
+      "uid": "blog-stats",
+      "version": 1,
+      "schemaVersion": 39,
+      "time": { "from": "now-30d", "to": "now" },
+      "refresh": "10m",
+      "timezone": "browser",
+      "editable": false,
+      "panels": [
+        {
+          "type": "stat",
+          "title": "Total Requests",
+          "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+          "datasource": { "type": "frser-sqlite-datasource", "uid": "sqlite" },
+          "targets": [
+            {
+              "rawQueryText": "SELECT COUNT(*) AS total FROM access WHERE ts >= $__from/1000 AND ts <= $__to/1000",
+              "format": "table"
+            }
+          ]
+        },
+        {
+          "type": "stat",
+          "title": "Requests (last 24h)",
+          "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
+          "datasource": { "type": "frser-sqlite-datasource", "uid": "sqlite" },
+          "targets": [
+            {
+              "rawQueryText": "SELECT COUNT(*) AS total FROM access WHERE ts >= (strftime('%s','now') - 86400)",
+              "format": "table"
+            }
+          ]
+        },
+        {
+          "type": "timeseries",
+          "title": "Requests per day",
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+          "datasource": { "type": "frser-sqlite-datasource", "uid": "sqlite" },
+          "targets": [
+            {
+              "rawQueryText": "SELECT $__unixEpochGroupSeconds(ts, 86400) AS time, COUNT(*) AS requests FROM access WHERE ts >= $__from/1000 AND ts <= $__to/1000 GROUP BY 1 ORDER BY 1",
+              "format": "time_series",
+              "timeColumns": ["time"]
+            }
+          ]
+        },
+        {
+          "type": "barchart",
+          "title": "Status codes",
+          "gridPos": { "h": 8, "w": 6, "x": 12, "y": 4 },
+          "datasource": { "type": "frser-sqlite-datasource", "uid": "sqlite" },
+          "fieldConfig": { "defaults": { "custom": { "orientation": "horizontal" } } },
+          "targets": [
+            {
+              "rawQueryText": "SELECT status AS metric, COUNT(*) AS value FROM access WHERE ts >= $__from/1000 AND ts <= $__to/1000 GROUP BY status ORDER BY value DESC",
+              "format": "table"
+            }
+          ]
+        },
+        {
+          "type": "barchart",
+          "title": "Top pages",
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 12 },
+          "datasource": { "type": "frser-sqlite-datasource", "uid": "sqlite" },
+          "targets": [
+            {
+              "rawQueryText": "SELECT uri AS metric, COUNT(*) AS value FROM access WHERE ts >= $__from/1000 AND ts <= $__to/1000 GROUP BY uri ORDER BY value DESC LIMIT 20",
+              "format": "table"
+            }
+          ]
+        },
+        {
+          "type": "barchart",
+          "title": "Top referrers",
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 12 },
+          "datasource": { "type": "frser-sqlite-datasource", "uid": "sqlite" },
+          "targets": [
+            {
+              "rawQueryText": "SELECT referer AS metric, COUNT(*) AS value FROM access WHERE ts >= $__from/1000 AND ts <= $__to/1000 AND referer IS NOT NULL AND referer != '' GROUP BY referer ORDER BY value DESC LIMIT 20",
+              "format": "table"
+            }
+          ]
+        },
+        {
+          "type": "barchart",
+          "title": "Top user agents",
+          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 20 },
+          "datasource": { "type": "frser-sqlite-datasource", "uid": "sqlite" },
+          "targets": [
+            {
+              "rawQueryText": "SELECT user_agent AS metric, COUNT(*) AS value FROM access WHERE ts >= $__from/1000 AND ts <= $__to/1000 AND user_agent IS NOT NULL GROUP BY user_agent ORDER BY value DESC LIMIT 20",
+              "format": "table"
+            }
+          ]
+        },
+        {
+          "type": "barchart",
+          "title": "Top IPs",
+          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 20 },
+          "datasource": { "type": "frser-sqlite-datasource", "uid": "sqlite" },
+          "targets": [
+            {
+              "rawQueryText": "SELECT remote_ip AS metric, COUNT(*) AS value FROM access WHERE ts >= $__from/1000 AND ts <= $__to/1000 GROUP BY remote_ip ORDER BY value DESC LIMIT 20",
+              "format": "table"
+            }
+          ]
+        }
+      ]
+    }
+
+#@overlay/match by=overlay.subset({"kind":"Deployment","metadata":{"name":"blog"}})
+---
+spec:
+  template:
+    spec:
+      initContainers:
+      #@overlay/append
+      - name: grafana-plugins
+        image: alpine:3.20
+        command: ["/bin/sh"]
+        args:
+        - -c
+        - |
+          set -ex
+          mkdir -p /var/lib/grafana/plugins /tmp/extract
+          apk add --no-cache unzip >/dev/null
+          wget -q -O /tmp/p.zip "https://grafana.com/api/plugins/frser-sqlite-datasource/versions/4.0.6/download"
+          unzip -oq /tmp/p.zip -d /tmp/extract
+          cp -r /tmp/extract/frser-sqlite-datasource /var/lib/grafana/plugins/
+          chmod -R a+rX /var/lib/grafana/plugins
+          rm -rf /tmp/extract /tmp/p.zip
+          test -f /var/lib/grafana/plugins/frser-sqlite-datasource/plugin.json
+        volumeMounts:
+        - name: grafana-plugins
+          mountPath: /var/lib/grafana/plugins

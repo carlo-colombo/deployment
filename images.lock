@@ -2,18 +2,24 @@ apiVersion: kbld.k14s.io/v1alpha1
 kind: Config
 minimumRequiredVersion: 0.47.2
 overrides:
-- image: allinurl/goaccess
-  newImage: index.docker.io/allinurl/goaccess@sha256:10633c976b2101d3cef0724a23a33c76ee06e7a7a76dad097dd6323de2e54ca0
+- image: alpine:3.20
+  newImage: index.docker.io/library/alpine@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc
   preresolved: true
 - image: caddy
-  newImage: index.docker.io/library/caddy@sha256:ec18ee54aab3315c22e25f3b2babda73ff8007d39b13b3bd1bfffa2f0444c7d9
+  newImage: index.docker.io/library/caddy@sha256:844f60b64e4724a5aa8245e019dace0d3f199f7433ce6c57676cb30a920dbad9
+  preresolved: true
+- image: grafana/grafana-oss:latest
+  newImage: index.docker.io/grafana/grafana-oss@sha256:5dad0df181cb644a14e13617b913b261a54f7d4fd4510721dba420929f35bea2
   preresolved: true
 - image: pixelfed2wiki
-  newImage: rg.nl-ams.scw.cloud/carlo-colombo/pixelfed2wiki@sha256:9dcf5f33ccc3c4c8cf349fb472ca3756f7211ed0baa9260332dfc342b124a265
+  newImage: rg.nl-ams.scw.cloud/carlo-colombo/pixelfed2wiki@sha256:77cee9c8381ccaa37ff014f64025a5379be3dc48e699fd415aedbb4db1735250
+  preresolved: true
+- image: python:3-alpine
+  newImage: index.docker.io/library/python@sha256:a1321512d6a287428c50dcdf2ab3857761127e03a23b1f648e9c1c0de59288f8
   preresolved: true
 - image: restic/restic:latest
-  newImage: index.docker.io/restic/restic@sha256:63e86f6726e2afcd49c882d2fc67ae483a38a1ffcb50cbf5f474bd11f5129217
+  newImage: index.docker.io/restic/restic@sha256:9940e6c7421ab3a21ee9fdc4e91596d04c792b600d31b102696c75cbf3ac4481
   preresolved: true
 - image: tiddlywiki
-  newImage: rg.nl-ams.scw.cloud/carlo-colombo/tiddlywiki@sha256:a7c691844ab8e9f95cc9081d3d12d146173d6a38045db2b6f4fda9090150e8b7
+  newImage: rg.nl-ams.scw.cloud/carlo-colombo/tiddlywiki@sha256:b66c7cb65c02e8d098ca9bdce6a10a5ce51d306b0e8ff0cba2c3e65a93004f26
   preresolved: true
