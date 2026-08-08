@@ -373,7 +373,7 @@ data:
           "title": "Status codes",
           "gridPos": { "h": 8, "w": 6, "x": 12, "y": 4 },
           "datasource": { "type": "frser-sqlite-datasource", "uid": "sqlite" },
-          "fieldConfig": { "defaults": { "custom": { "orientation": "horizontal" } } },
+          "options": { "orientation": "horizontal" },
           "targets": [
             {
               "rawQueryText": "SELECT status AS metric, COUNT(*) AS value FROM access WHERE ts >= $__from/1000 AND ts <= $__to/1000 GROUP BY status ORDER BY value DESC",
@@ -384,8 +384,9 @@ data:
         {
           "type": "barchart",
           "title": "Top pages",
-          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 12 },
+          "gridPos": { "h": 14, "w": 12, "x": 0, "y": 12 },
           "datasource": { "type": "frser-sqlite-datasource", "uid": "sqlite" },
+          "options": { "orientation": "horizontal" },
           "targets": [
             {
               "rawQueryText": "SELECT uri AS metric, COUNT(*) AS value FROM access WHERE ts >= $__from/1000 AND ts <= $__to/1000 GROUP BY uri ORDER BY value DESC LIMIT 20",
@@ -396,8 +397,9 @@ data:
         {
           "type": "barchart",
           "title": "Top referrers",
-          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 12 },
+          "gridPos": { "h": 14, "w": 12, "x": 12, "y": 12 },
           "datasource": { "type": "frser-sqlite-datasource", "uid": "sqlite" },
+          "options": { "orientation": "horizontal" },
           "targets": [
             {
               "rawQueryText": "SELECT referer AS metric, COUNT(*) AS value FROM access WHERE ts >= $__from/1000 AND ts <= $__to/1000 AND referer IS NOT NULL AND referer != '' GROUP BY referer ORDER BY value DESC LIMIT 20",
@@ -408,8 +410,9 @@ data:
         {
           "type": "barchart",
           "title": "Top user agents",
-          "gridPos": { "h": 8, "w": 12, "x": 0, "y": 20 },
+          "gridPos": { "h": 14, "w": 12, "x": 0, "y": 26 },
           "datasource": { "type": "frser-sqlite-datasource", "uid": "sqlite" },
+          "options": { "orientation": "horizontal" },
           "targets": [
             {
               "rawQueryText": "SELECT user_agent AS metric, COUNT(*) AS value FROM access WHERE ts >= $__from/1000 AND ts <= $__to/1000 AND user_agent IS NOT NULL GROUP BY user_agent ORDER BY value DESC LIMIT 20",
@@ -420,8 +423,9 @@ data:
         {
           "type": "barchart",
           "title": "Top IPs",
-          "gridPos": { "h": 8, "w": 12, "x": 12, "y": 20 },
+          "gridPos": { "h": 14, "w": 12, "x": 12, "y": 26 },
           "datasource": { "type": "frser-sqlite-datasource", "uid": "sqlite" },
+          "options": { "orientation": "horizontal" },
           "targets": [
             {
               "rawQueryText": "SELECT remote_ip AS metric, COUNT(*) AS value FROM access WHERE ts >= $__from/1000 AND ts <= $__to/1000 GROUP BY remote_ip ORDER BY value DESC LIMIT 20",
