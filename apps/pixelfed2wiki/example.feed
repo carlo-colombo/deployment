@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+    <id>https://pixelfed.social/users/lit.pictures.atom</id>
+    <title>lit.pictures on pixelfed.social</title>
+    <subtitle type="html">having a camera, taking photos, generating images</subtitle>
+            <updated>2026-05-11T19:09:41.000Z</updated>
+    
+    <author>
+        <name>lit.pictures</name>
+        <uri>https://pixelfed.social/lit.pictures</uri>
+    </author>
+
+    <icon>https://pxscdn.com/cache/avatars/495198478678223307/avatar_z8xzz4.jpg</icon>
+    <logo>https://pxscdn.com/cache/avatars/495198478678223307/avatar_z8xzz4.jpg</logo>
+
+    <link rel="alternate" type="text/html" href="https://pixelfed.social/lit.pictures" />
+    <link rel="self" type="application/atom+xml" href="https://pixelfed.social/users/lit.pictures.atom" />
+
+                        <entry>
+                <id>https://pixelfed.social/p/lit.pictures/959530011621413185</id>
+                <title>Mallard and grey heron at the Sartirana lake #birds #birdsofpixelfed #italy #photography</title>
+                <updated>2026-05-11T19:09:41.000Z</updated>
+                <author>
+                    <name>lit.pictures</name>
+                    <uri>https://pixelfed.social/lit.pictures</uri>
+                </author>
+                <content type="html">
+                    <![CDATA[
+                    <div class="media-gallery">
+                                                    <img class="media-item" src="https://pxscdn.com/public/m/_v2/495198478678223307/0d402c64b-2701fc/IncYvkZGpgJr/SI5mxg32czD3V9SZRMJpreaSvBF77DmsLtsbHuPc.jpg" alt="">
+                                                    <img class="media-item" src="https://pxscdn.com/public/m/_v2/495198478678223307/0d402c64b-2701fc/zd8YEH9Z1UJc/WKokfKRH0bl0WroBY35MAhfp2S4WWckSdbEohfS7.jpg" alt="">
+                                            </div>
+                    <p style="padding:10px;">Mallard and grey heron at the Sartirana lake <a href="https://pixelfed.social/discover/tags/birds?src=hash" title="#birds" class="u-url hashtag" rel="external nofollow noopener">#birds</a> <a href="https://pixelfed.social/discover/tags/birdsofpixelfed?src=hash" title="#birdsofpixelfed" class="u-url hashtag" rel="external nofollow noopener">#birdsofpixelfed</a> <a href="https://pixelfed.social/discover/tags/italy?src=hash" title="#italy" class="u-url hashtag" rel="external nofollow noopener">#italy</a> <a href="https://pixelfed.social/discover/tags/photography?src=hash" title="#photography" class="u-url hashtag" rel="external nofollow noopener">#photography</a></p>
+                    ]]>
+                </content>
+                <link rel="alternate" href="https://pixelfed.social/p/lit.pictures/959530011621413185" />
+                                    <summary type="html">Mallard and grey heron at the Sartirana lake &lt;a href=&quot;https://pixelfed.social/discover/tags/birds?src=hash&quot; title=&quot;#birds&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#birds&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/birdsofpixelfed?src=hash&quot; title=&quot;#birdsofpixelfed&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#birdsofpixelfed&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/italy?src=hash&quot; title=&quot;#italy&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#italy&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/photography?src=hash&quot; title=&quot;#photography&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#photography&lt;/a&gt;</summary>
+                                                    <media:content
+                        url="https://pxscdn.com/public/m/_v2/495198478678223307/0d402c64b-2701fc/IncYvkZGpgJr/SI5mxg32czD3V9SZRMJpreaSvBF77DmsLtsbHuPc.jpg"
+                        type="image/jpg"
+                        medium="image"
+                    />
+                                    <media:content
+                        url="https://pxscdn.com/public/m/_v2/495198478678223307/0d402c64b-2701fc/zd8YEH9Z1UJc/WKokfKRH0bl0WroBY35MAhfp2S4WWckSdbEohfS7.jpg"
+                        type="image/jpg"
+                        medium="image"
+                    />
+                            </entry>
+                    <entry>
+                <id>https://pixelfed.social/p/lit.pictures/943657477317990241</id>
+                <title>City in the #background - #BlueSkyArtShow #creativecoding #generativeart #generative -#computeshader simulating random lines over an original photo of mantova #italy #northernitaly</title>
+                <updated>2026-03-28T23:57:54.000Z</updated>
+                <author>
+                    <name>lit.pictures</name>
+                    <uri>https://pixelfed.social/lit.pictures</uri>
+                </author>
+                <content type="html">
+                    <![CDATA[
+                    <div class="media-gallery">
+                                                    <img class="media-item" src="https://pxscdn.com/public/m/_v2/495198478678223307/a1431798c-70628a/0l5JAkdAXoIr/du9hJe9WvrkVlHDbwlbgvjaoCFtM7tWqyqWBBVCf.jpg" alt="">
+                                            </div>
+                    <p style="padding:10px;">City in the <a href="https://pixelfed.social/discover/tags/background?src=hash" title="#background" class="u-url hashtag" rel="external nofollow noopener">#background</a> - <a href="https://pixelfed.social/discover/tags/BlueSkyArtShow?src=hash" title="#BlueSkyArtShow" class="u-url hashtag" rel="external nofollow noopener">#BlueSkyArtShow</a> <a href="https://pixelfed.social/discover/tags/creativecoding?src=hash" title="#creativecoding" class="u-url hashtag" rel="external nofollow noopener">#creativecoding</a> <a href="https://pixelfed.social/discover/tags/generativeart?src=hash" title="#generativeart" class="u-url hashtag" rel="external nofollow noopener">#generativeart</a> <a href="https://pixelfed.social/discover/tags/generative?src=hash" title="#generative" class="u-url hashtag" rel="external nofollow noopener">#generative</a> -<a href="https://pixelfed.social/discover/tags/computeshader?src=hash" title="#computeshader" class="u-url hashtag" rel="external nofollow noopener">#computeshader</a> simulating random lines over an original photo of mantova <a href="https://pixelfed.social/discover/tags/italy?src=hash" title="#italy" class="u-url hashtag" rel="external nofollow noopener">#italy</a> <a href="https://pixelfed.social/discover/tags/northernitaly?src=hash" title="#northernitaly" class="u-url hashtag" rel="external nofollow noopener">#northernitaly</a></p>
+                    ]]>
+                </content>
+                <link rel="alternate" href="https://pixelfed.social/p/lit.pictures/943657477317990241" />
+                                    <summary type="html">City in the &lt;a href=&quot;https://pixelfed.social/discover/tags/background?src=hash&quot; title=&quot;#background&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#background&lt;/a&gt; - &lt;a href=&quot;https://pixelfed.social/discover/tags/BlueSkyArtShow?src=hash&quot; title=&quot;#BlueSkyArtShow&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#BlueSkyArtShow&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/creativecoding?src=hash&quot; title=&quot;#creativecoding&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#creativecoding&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/generativeart?src=hash&quot; title=&quot;#generativeart&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#generativeart&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/generative?src=hash&quot; title=&quot;#generative&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#generative&lt;/a&gt; -&lt;a href=&quot;https://pixelfed.social/discover/tags/computeshader?src=hash&quot; title=&quot;#computeshader&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#computeshader&lt;/a&gt; simulating random lines over an original photo of mantova &lt;a href=&quot;https://pixelfed.social/discover/tags/italy?src=hash&quot; title=&quot;#italy&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#italy&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/northernitaly?src=hash&quot; title=&quot;#northernitaly&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#northernitaly&lt;/a&gt;</summary>
+                                                    <media:content
+                        url="https://pxscdn.com/public/m/_v2/495198478678223307/a1431798c-70628a/0l5JAkdAXoIr/du9hJe9WvrkVlHDbwlbgvjaoCFtM7tWqyqWBBVCf.jpg"
+                        type="image/jpg"
+                        medium="image"
+                    />
+                            </entry>
+                    <entry>
+                <id>https://pixelfed.social/p/lit.pictures/909550272036386037</id>
+                <title>Panning shot at Monza racetrack during a charity event #panning #car #carphotography #panningshot #6rds #ferrari #porsche #italy #monza</title>
+                <updated>2025-12-24T21:08:03.000Z</updated>
+                <author>
+                    <name>lit.pictures</name>
+                    <uri>https://pixelfed.social/lit.pictures</uri>
+                </author>
+                <content type="html">
+                    <![CDATA[
+                    <div class="media-gallery">
+                                                    <img class="media-item" src="https://pxscdn.com/public/m/_v2/495198478678223307/c19ce1b25-2f8843/Z40hf7LbfxvV/qWKdB6MTJB4AdkS7PXXpWbvcx0cE5nsH1LRMWRT6.jpg" alt="">
+                                                    <img class="media-item" src="https://pxscdn.com/public/m/_v2/495198478678223307/c19ce1b25-2f8843/MaDXp6NXsVIB/PtNhVMZp0c4wtHjyVqXUCFlh0IbWWRNlXV8SWKt7.jpg" alt="">
+                                            </div>
+                    <p style="padding:10px;">Panning shot at Monza racetrack during a charity event <a href="https://pixelfed.social/discover/tags/panning?src=hash" title="#panning" class="u-url hashtag" rel="external nofollow noopener">#panning</a> <a href="https://pixelfed.social/discover/tags/car?src=hash" title="#car" class="u-url hashtag" rel="external nofollow noopener">#car</a> <a href="https://pixelfed.social/discover/tags/carphotography?src=hash" title="#carphotography" class="u-url hashtag" rel="external nofollow noopener">#carphotography</a> <a href="https://pixelfed.social/discover/tags/panningshot?src=hash" title="#panningshot" class="u-url hashtag" rel="external nofollow noopener">#panningshot</a> <a href="https://pixelfed.social/discover/tags/6rds?src=hash" title="#6rds" class="u-url hashtag" rel="external nofollow noopener">#6rds</a> <a href="https://pixelfed.social/discover/tags/ferrari?src=hash" title="#ferrari" class="u-url hashtag" rel="external nofollow noopener">#ferrari</a> <a href="https://pixelfed.social/discover/tags/porsche?src=hash" title="#porsche" class="u-url hashtag" rel="external nofollow noopener">#porsche</a> <a href="https://pixelfed.social/discover/tags/italy?src=hash" title="#italy" class="u-url hashtag" rel="external nofollow noopener">#italy</a> <a href="https://pixelfed.social/discover/tags/monza?src=hash" title="#monza" class="u-url hashtag" rel="external nofollow noopener">#monza</a></p>
+                    ]]>
+                </content>
+                <link rel="alternate" href="https://pixelfed.social/p/lit.pictures/909550272036386037" />
+                                    <summary type="html">Panning shot at Monza racetrack during a charity event &lt;a href=&quot;https://pixelfed.social/discover/tags/panning?src=hash&quot; title=&quot;#panning&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#panning&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/car?src=hash&quot; title=&quot;#car&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#car&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/carphotography?src=hash&quot; title=&quot;#carphotography&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#carphotography&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/panningshot?src=hash&quot; title=&quot;#panningshot&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#panningshot&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/6rds?src=hash&quot; title=&quot;#6rds&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#6rds&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/ferrari?src=hash&quot; title=&quot;#ferrari&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#ferrari&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/porsche?src=hash&quot; title=&quot;#porsche&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#porsche&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/italy?src=hash&quot; title=&quot;#italy&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#italy&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/monza?src=hash&quot; title=&quot;#monza&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#monza&lt;/a&gt;</summary>
+                                                    <media:content
+                        url="https://pxscdn.com/public/m/_v2/495198478678223307/c19ce1b25-2f8843/Z40hf7LbfxvV/qWKdB6MTJB4AdkS7PXXpWbvcx0cE5nsH1LRMWRT6.jpg"
+                        type="image/jpg"
+                        medium="image"
+                    />
+                                    <media:content
+                        url="https://pxscdn.com/public/m/_v2/495198478678223307/c19ce1b25-2f8843/MaDXp6NXsVIB/PtNhVMZp0c4wtHjyVqXUCFlh0IbWWRNlXV8SWKt7.jpg"
+                        type="image/jpg"
+                        medium="image"
+                    />
+                            </entry>
+                    <entry>
+                <id>https://pixelfed.social/p/lit.pictures/908461046829081129</id>
+                <title>Cappella del Mantegna - Cattedrale di Sant&#039;Andrea #mantova - #photography #church #northernitaly #italy</title>
+                <updated>2025-12-21T20:59:51.000Z</updated>
+                <author>
+                    <name>lit.pictures</name>
+                    <uri>https://pixelfed.social/lit.pictures</uri>
+                </author>
+                <content type="html">
+                    <![CDATA[
+                    <div class="media-gallery">
+                                                    <img class="media-item" src="https://pxscdn.com/public/m/_v2/495198478678223307/c19ce1b25-2f8843/DTQ77qkLiuvv/EzZ8c1D25C1o78fZyqIF0y9C4Nn0DcSvQrJ0xTaL.jpg" alt="">
+                                            </div>
+                    <p style="padding:10px;">Cappella del Mantegna - Cattedrale di Sant'Andrea <a href="https://pixelfed.social/discover/tags/mantova?src=hash" title="#mantova" class="u-url hashtag" rel="external nofollow noopener">#mantova</a> - <a href="https://pixelfed.social/discover/tags/photography?src=hash" title="#photography" class="u-url hashtag" rel="external nofollow noopener">#photography</a> <a href="https://pixelfed.social/discover/tags/church?src=hash" title="#church" class="u-url hashtag" rel="external nofollow noopener">#church</a> <a href="https://pixelfed.social/discover/tags/northernitaly?src=hash" title="#northernitaly" class="u-url hashtag" rel="external nofollow noopener">#northernitaly</a> <a href="https://pixelfed.social/discover/tags/italy?src=hash" title="#italy" class="u-url hashtag" rel="external nofollow noopener">#italy</a></p>
+                    ]]>
+                </content>
+                <link rel="alternate" href="https://pixelfed.social/p/lit.pictures/908461046829081129" />
+                                    <summary type="html">Cappella del Mantegna - Cattedrale di Sant&#039;Andrea &lt;a href=&quot;https://pixelfed.social/discover/tags/mantova?src=hash&quot; title=&quot;#mantova&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#mantova&lt;/a&gt; - &lt;a href=&quot;https://pixelfed.social/discover/tags/photography?src=hash&quot; title=&quot;#photography&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#photography&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/church?src=hash&quot; title=&quot;#church&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#church&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/northernitaly?src=hash&quot; title=&quot;#northernitaly&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#northernitaly&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/italy?src=hash&quot; title=&quot;#italy&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#italy&lt;/a&gt;</summary>
+                                                    <media:content
+                        url="https://pxscdn.com/public/m/_v2/495198478678223307/c19ce1b25-2f8843/DTQ77qkLiuvv/EzZ8c1D25C1o78fZyqIF0y9C4Nn0DcSvQrJ0xTaL.jpg"
+                        type="image/jpg"
+                        medium="image"
+                    />
+                            </entry>
+                    <entry>
+                <id>https://pixelfed.social/p/lit.pictures/889495985684205876</id>
+                <title>Amsterdam NDSM  - #photography #urbangaze #waterway #streetphotography #amsterdam #travelphotography #ship #urbanexploration #netherland</title>
+                <updated>2025-10-30T12:59:29.000Z</updated>
+                <author>
+                    <name>lit.pictures</name>
+                    <uri>https://pixelfed.social/lit.pictures</uri>
+                </author>
+                <content type="html">
+                    <![CDATA[
+                    <div class="media-gallery">
+                                                    <img class="media-item" src="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/qvC3UMii9ASw/79erNoWXbLRuBXJEpWcJvajLwt47Pc7FkIm6miPj.jpg" alt="">
+                                                    <img class="media-item" src="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/uZBEdaJO1vg0/zP6370iBvGa1Yw9bf9VGPuwZ1ysneyvzKMPPChvx.jpg" alt="">
+                                                    <img class="media-item" src="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/KDrla2sYUEDw/FgViaHn34bhrV85bCpkRhYg59zwOV3ofdOLSICHp.jpg" alt="">
+                                            </div>
+                    <p style="padding:10px;">Amsterdam NDSM  - <a href="https://pixelfed.social/discover/tags/photography?src=hash" title="#photography" class="u-url hashtag" rel="external nofollow noopener">#photography</a> <a href="https://pixelfed.social/discover/tags/urbangaze?src=hash" title="#urbangaze" class="u-url hashtag" rel="external nofollow noopener">#urbangaze</a> <a href="https://pixelfed.social/discover/tags/waterway?src=hash" title="#waterway" class="u-url hashtag" rel="external nofollow noopener">#waterway</a> <a href="https://pixelfed.social/discover/tags/streetphotography?src=hash" title="#streetphotography" class="u-url hashtag" rel="external nofollow noopener">#streetphotography</a> <a href="https://pixelfed.social/discover/tags/amsterdam?src=hash" title="#amsterdam" class="u-url hashtag" rel="external nofollow noopener">#amsterdam</a> <a href="https://pixelfed.social/discover/tags/travelphotography?src=hash" title="#travelphotography" class="u-url hashtag" rel="external nofollow noopener">#travelphotography</a> <a href="https://pixelfed.social/discover/tags/ship?src=hash" title="#ship" class="u-url hashtag" rel="external nofollow noopener">#ship</a> <a href="https://pixelfed.social/discover/tags/urbanexploration?src=hash" title="#urbanexploration" class="u-url hashtag" rel="external nofollow noopener">#urbanexploration</a> <a href="https://pixelfed.social/discover/tags/netherland?src=hash" title="#netherland" class="u-url hashtag" rel="external nofollow noopener">#netherland</a></p>
+                    ]]>
+                </content>
+                <link rel="alternate" href="https://pixelfed.social/p/lit.pictures/889495985684205876" />
+                                    <summary type="html">Amsterdam NDSM  - &lt;a href=&quot;https://pixelfed.social/discover/tags/photography?src=hash&quot; title=&quot;#photography&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#photography&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/urbangaze?src=hash&quot; title=&quot;#urbangaze&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#urbangaze&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/waterway?src=hash&quot; title=&quot;#waterway&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#waterway&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/streetphotography?src=hash&quot; title=&quot;#streetphotography&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#streetphotography&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/amsterdam?src=hash&quot; title=&quot;#amsterdam&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#amsterdam&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/travelphotography?src=hash&quot; title=&quot;#travelphotography&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#travelphotography&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/ship?src=hash&quot; title=&quot;#ship&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#ship&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/urbanexploration?src=hash&quot; title=&quot;#urbanexploration&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#urbanexploration&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/netherland?src=hash&quot; title=&quot;#netherland&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#netherland&lt;/a&gt;</summary>
+                                                    <media:content
+                        url="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/qvC3UMii9ASw/79erNoWXbLRuBXJEpWcJvajLwt47Pc7FkIm6miPj.jpg"
+                        type="image/jpg"
+                        medium="image"
+                    />
+                                    <media:content
+                        url="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/uZBEdaJO1vg0/zP6370iBvGa1Yw9bf9VGPuwZ1ysneyvzKMPPChvx.jpg"
+                        type="image/jpg"
+                        medium="image"
+                    />
+                                    <media:content
+                        url="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/KDrla2sYUEDw/FgViaHn34bhrV85bCpkRhYg59zwOV3ofdOLSICHp.jpg"
+                        type="image/jpg"
+                        medium="image"
+                    />
+                            </entry>
+                    <entry>
+                <id>https://pixelfed.social/p/lit.pictures/888867245853242202</id>
+                <title>Black and white photo dump from Amsterdam #photography #monochrome #blackandwhite #classicmono #amsterdam #travelphotography</title>
+                <updated>2025-10-28T19:21:05.000Z</updated>
+                <author>
+                    <name>lit.pictures</name>
+                    <uri>https://pixelfed.social/lit.pictures</uri>
+                </author>
+                <content type="html">
+                    <![CDATA[
+                    <div class="media-gallery">
+                                                    <img class="media-item" src="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/OZohoHA1TUlb/dMJswk0VqMU8uS9va76iQS258NiEE9ihOu6sPguq.jpg" alt="">
+                                                    <img class="media-item" src="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/Ij08tr7zg9OT/8XLJGbNWexuSJDf4shEiqPANToi7jcWGgZ9RTWHI.jpg" alt="">
+                                                    <img class="media-item" src="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/KmvKcItruTEw/5mcJ3dFw8YlcCrNA183cadjvb5T2ihCsGg7r7Y1d.jpg" alt="">
+                                                    <img class="media-item" src="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/skWCuEX4CTA5/Ea2hfFRRGlnX6YfqZUHZeNZusDrXuZrNwp8fOMaw.jpg" alt="">
+                                            </div>
+                    <p style="padding:10px;">Black and white photo dump from Amsterdam <a href="https://pixelfed.social/discover/tags/photography?src=hash" title="#photography" class="u-url hashtag" rel="external nofollow noopener">#photography</a> <a href="https://pixelfed.social/discover/tags/monochrome?src=hash" title="#monochrome" class="u-url hashtag" rel="external nofollow noopener">#monochrome</a> <a href="https://pixelfed.social/discover/tags/blackandwhite?src=hash" title="#blackandwhite" class="u-url hashtag" rel="external nofollow noopener">#blackandwhite</a> <a href="https://pixelfed.social/discover/tags/classicmono?src=hash" title="#classicmono" class="u-url hashtag" rel="external nofollow noopener">#classicmono</a> <a href="https://pixelfed.social/discover/tags/amsterdam?src=hash" title="#amsterdam" class="u-url hashtag" rel="external nofollow noopener">#amsterdam</a> <a href="https://pixelfed.social/discover/tags/travelphotography?src=hash" title="#travelphotography" class="u-url hashtag" rel="external nofollow noopener">#travelphotography</a></p>
+                    ]]>
+                </content>
+                <link rel="alternate" href="https://pixelfed.social/p/lit.pictures/888867245853242202" />
+                                    <summary type="html">Black and white photo dump from Amsterdam &lt;a href=&quot;https://pixelfed.social/discover/tags/photography?src=hash&quot; title=&quot;#photography&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#photography&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/monochrome?src=hash&quot; title=&quot;#monochrome&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#monochrome&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/blackandwhite?src=hash&quot; title=&quot;#blackandwhite&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#blackandwhite&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/classicmono?src=hash&quot; title=&quot;#classicmono&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#classicmono&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/amsterdam?src=hash&quot; title=&quot;#amsterdam&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#amsterdam&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/travelphotography?src=hash&quot; title=&quot;#travelphotography&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#travelphotography&lt;/a&gt;</summary>
+                                                    <media:content
+                        url="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/OZohoHA1TUlb/dMJswk0VqMU8uS9va76iQS258NiEE9ihOu6sPguq.jpg"
+                        type="image/jpg"
+                        medium="image"
+                    />
+                                    <media:content
+                        url="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/Ij08tr7zg9OT/8XLJGbNWexuSJDf4shEiqPANToi7jcWGgZ9RTWHI.jpg"
+                        type="image/jpg"
+                        medium="image"
+                    />
+                                    <media:content
+                        url="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/KmvKcItruTEw/5mcJ3dFw8YlcCrNA183cadjvb5T2ihCsGg7r7Y1d.jpg"
+                        type="image/jpg"
+                        medium="image"
+                    />
+                                    <media:content
+                        url="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/skWCuEX4CTA5/Ea2hfFRRGlnX6YfqZUHZeNZusDrXuZrNwp8fOMaw.jpg"
+                        type="image/jpg"
+                        medium="image"
+                    />
+                            </entry>
+                    <entry>
+                <id>https://pixelfed.social/p/lit.pictures/888135429539352633</id>
+                <title>Burning silhouette sunset - Pusiano Lake 
+#silouette #sunset #photography #italy #northernitaly</title>
+                <updated>2025-10-26T18:53:07.000Z</updated>
+                <author>
+                    <name>lit.pictures</name>
+                    <uri>https://pixelfed.social/lit.pictures</uri>
+                </author>
+                <content type="html">
+                    <![CDATA[
+                    <div class="media-gallery">
+                                                    <img class="media-item" src="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/96dxmnEiFWQD/VSWEccd2FYTre4uf90H4QKhil3G9GdruoCWlRFqy.jpg" alt="">
+                                            </div>
+                    <p style="padding:10px;">Burning silhouette sunset - Pusiano Lake <br />
+<a href="https://pixelfed.social/discover/tags/silouette?src=hash" title="#silouette" class="u-url hashtag" rel="external nofollow noopener">#silouette</a> <a href="https://pixelfed.social/discover/tags/sunset?src=hash" title="#sunset" class="u-url hashtag" rel="external nofollow noopener">#sunset</a> <a href="https://pixelfed.social/discover/tags/photography?src=hash" title="#photography" class="u-url hashtag" rel="external nofollow noopener">#photography</a> <a href="https://pixelfed.social/discover/tags/italy?src=hash" title="#italy" class="u-url hashtag" rel="external nofollow noopener">#italy</a> <a href="https://pixelfed.social/discover/tags/northernitaly?src=hash" title="#northernitaly" class="u-url hashtag" rel="external nofollow noopener">#northernitaly</a></p>
+                    ]]>
+                </content>
+                <link rel="alternate" href="https://pixelfed.social/p/lit.pictures/888135429539352633" />
+                                    <summary type="html">Burning silhouette sunset - Pusiano Lake &lt;br /&gt;
+&lt;a href=&quot;https://pixelfed.social/discover/tags/silouette?src=hash&quot; title=&quot;#silouette&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#silouette&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/sunset?src=hash&quot; title=&quot;#sunset&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#sunset&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/photography?src=hash&quot; title=&quot;#photography&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#photography&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/italy?src=hash&quot; title=&quot;#italy&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#italy&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/northernitaly?src=hash&quot; title=&quot;#northernitaly&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#northernitaly&lt;/a&gt;</summary>
+                                                    <media:content
+                        url="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/96dxmnEiFWQD/VSWEccd2FYTre4uf90H4QKhil3G9GdruoCWlRFqy.jpg"
+                        type="image/jpg"
+                        medium="image"
+                    />
+                            </entry>
+                    <entry>
+                <id>https://pixelfed.social/p/lit.pictures/887768652649697810</id>
+                <title>#inside #blueskyartshow #pareidolia</title>
+                <updated>2025-10-25T18:35:40.000Z</updated>
+                <author>
+                    <name>lit.pictures</name>
+                    <uri>https://pixelfed.social/lit.pictures</uri>
+                </author>
+                <content type="html">
+                    <![CDATA[
+                    <div class="media-gallery">
+                                                    <img class="media-item" src="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/Cd1rMh1D8xvt/tZpgmDnY6g3mSzXoF2n7uwhkqFVeT6ibeH4lWZbl.jpg" alt="">
+                                            </div>
+                    <p style="padding:10px;"><a href="https://pixelfed.social/discover/tags/inside?src=hash" title="#inside" class="u-url hashtag" rel="external nofollow noopener">#inside</a> <a href="https://pixelfed.social/discover/tags/blueskyartshow?src=hash" title="#blueskyartshow" class="u-url hashtag" rel="external nofollow noopener">#blueskyartshow</a> <a href="https://pixelfed.social/discover/tags/pareidolia?src=hash" title="#pareidolia" class="u-url hashtag" rel="external nofollow noopener">#pareidolia</a></p>
+                    ]]>
+                </content>
+                <link rel="alternate" href="https://pixelfed.social/p/lit.pictures/887768652649697810" />
+                                    <summary type="html">&lt;a href=&quot;https://pixelfed.social/discover/tags/inside?src=hash&quot; title=&quot;#inside&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#inside&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/blueskyartshow?src=hash&quot; title=&quot;#blueskyartshow&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#blueskyartshow&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/pareidolia?src=hash&quot; title=&quot;#pareidolia&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#pareidolia&lt;/a&gt;</summary>
+                                                    <media:content
+                        url="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/Cd1rMh1D8xvt/tZpgmDnY6g3mSzXoF2n7uwhkqFVeT6ibeH4lWZbl.jpg"
+                        type="image/jpg"
+                        medium="image"
+                    />
+                            </entry>
+                    <entry>
+                <id>https://pixelfed.social/p/lit.pictures/885100994965472546</id>
+                <title>#vertical #blueskyartshow #photography #monza #italianphotography Monza park transmission tower</title>
+                <updated>2025-10-18T09:55:21.000Z</updated>
+                <author>
+                    <name>lit.pictures</name>
+                    <uri>https://pixelfed.social/lit.pictures</uri>
+                </author>
+                <content type="html">
+                    <![CDATA[
+                    <div class="media-gallery">
+                                                    <img class="media-item" src="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/SKnGZLKHwSkR/GpbFqIUwm7iId3wFxaqGoUW7jg3W8WjxvU9ko3Ww.jpg" alt="">
+                                            </div>
+                    <p style="padding:10px;"><a href="https://pixelfed.social/discover/tags/vertical?src=hash" title="#vertical" class="u-url hashtag" rel="external nofollow noopener">#vertical</a> <a href="https://pixelfed.social/discover/tags/blueskyartshow?src=hash" title="#blueskyartshow" class="u-url hashtag" rel="external nofollow noopener">#blueskyartshow</a> <a href="https://pixelfed.social/discover/tags/photography?src=hash" title="#photography" class="u-url hashtag" rel="external nofollow noopener">#photography</a> <a href="https://pixelfed.social/discover/tags/monza?src=hash" title="#monza" class="u-url hashtag" rel="external nofollow noopener">#monza</a> <a href="https://pixelfed.social/discover/tags/italianphotography?src=hash" title="#italianphotography" class="u-url hashtag" rel="external nofollow noopener">#italianphotography</a> Monza park transmission tower</p>
+                    ]]>
+                </content>
+                <link rel="alternate" href="https://pixelfed.social/p/lit.pictures/885100994965472546" />
+                                    <summary type="html">&lt;a href=&quot;https://pixelfed.social/discover/tags/vertical?src=hash&quot; title=&quot;#vertical&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#vertical&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/blueskyartshow?src=hash&quot; title=&quot;#blueskyartshow&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#blueskyartshow&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/photography?src=hash&quot; title=&quot;#photography&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#photography&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/monza?src=hash&quot; title=&quot;#monza&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#monza&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/italianphotography?src=hash&quot; title=&quot;#italianphotography&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#italianphotography&lt;/a&gt; Monza park transmission tower</summary>
+                                                    <media:content
+                        url="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/SKnGZLKHwSkR/GpbFqIUwm7iId3wFxaqGoUW7jg3W8WjxvU9ko3Ww.jpg"
+                        type="image/jpg"
+                        medium="image"
+                    />
+                            </entry>
+                    <entry>
+                <id>https://pixelfed.social/p/lit.pictures/882722139234349371</id>
+                <title>#amsterdam #glow #blueskyartshow</title>
+                <updated>2025-10-11T20:22:38.000Z</updated>
+                <author>
+                    <name>lit.pictures</name>
+                    <uri>https://pixelfed.social/lit.pictures</uri>
+                </author>
+                <content type="html">
+                    <![CDATA[
+                    <div class="media-gallery">
+                                                    <img class="media-item" src="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/dOfid9d3WvCi/ddoo7ccOuNmdJtyB9EZvD0zguRh5OgaUjhm59rBS.jpg" alt="">
+                                            </div>
+                    <p style="padding:10px;"><a href="https://pixelfed.social/discover/tags/amsterdam?src=hash" title="#amsterdam" class="u-url hashtag" rel="external nofollow noopener">#amsterdam</a> <a href="https://pixelfed.social/discover/tags/glow?src=hash" title="#glow" class="u-url hashtag" rel="external nofollow noopener">#glow</a> <a href="https://pixelfed.social/discover/tags/blueskyartshow?src=hash" title="#blueskyartshow" class="u-url hashtag" rel="external nofollow noopener">#blueskyartshow</a></p>
+                    ]]>
+                </content>
+                <link rel="alternate" href="https://pixelfed.social/p/lit.pictures/882722139234349371" />
+                                    <summary type="html">&lt;a href=&quot;https://pixelfed.social/discover/tags/amsterdam?src=hash&quot; title=&quot;#amsterdam&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#amsterdam&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/glow?src=hash&quot; title=&quot;#glow&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#glow&lt;/a&gt; &lt;a href=&quot;https://pixelfed.social/discover/tags/blueskyartshow?src=hash&quot; title=&quot;#blueskyartshow&quot; class=&quot;u-url hashtag&quot; rel=&quot;external nofollow noopener&quot;&gt;#blueskyartshow&lt;/a&gt;</summary>
+                                                    <media:content
+                        url="https://pxscdn.com/public/m/_v2/495198478678223307/0c2c69eb8-6377a8/dOfid9d3WvCi/ddoo7ccOuNmdJtyB9EZvD0zguRh5OgaUjhm59rBS.jpg"
+                        type="image/jpg"
+                        medium="image"
+                    />
+                            </entry>
+            </feed>

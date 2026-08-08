@@ -28,3 +28,16 @@ feed2wiki-*.tar
 /tmp
 .creds.yml
 .envrc
+.telegram-bot-api.txt
+apps/pixelfed2wiki/pixelfed2wiki
+
+# Agent tooling / local config
+.antigravitycli/
+.gemini/
+skills/
+tiddlywiki.skill
+
+# kbld build outputs
+kbld-output.yaml
+resolved-image-ref.yaml
+resolved-image.yaml
