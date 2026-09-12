@@ -16,6 +16,10 @@ wiki:
   domain: ''
   users: []
 
+bluesky:
+  handle: ''
+  password: ''
+
 certs:
   email:
 
