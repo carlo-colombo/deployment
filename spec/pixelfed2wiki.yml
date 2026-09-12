@@ -6,16 +6,21 @@ apiVersion: kbld.k14s.io/v1alpha1
 kind: Sources
 sources:
 - image: pixelfed2wiki
-  path: apps/pixelfed2wiki
+  path: apps/pixelfed2wiki/cmd/pixelfed2wiki
   ko:
-    build:
-      importpath: .
+    build: {}
+- image: pixelfed-bs-bridge
+  path: apps/pixelfed2wiki/cmd/pixelfed-bs-bridge
+  ko:
+    build: {}
 ---
 apiVersion: kbld.k14s.io/v1alpha1
 kind: ImageDestinations
 destinations:
 - image: pixelfed2wiki
   newImage: rg.nl-ams.scw.cloud/carlo-colombo/pixelfed2wiki
+- image: pixelfed-bs-bridge
+  newImage: rg.nl-ams.scw.cloud/carlo-colombo/pixelfed-bs-bridge
 
 ---
 
@@ -54,3 +59,37 @@ spec:
                 value: litapp-blog-images
           restartPolicy: Never
       backoffLimit: 4
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pixelfed-bs-bridge
+spec:
+  schedule: "15 */2 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: pixelfed-bs-bridge
+            image: pixelfed-bs-bridge
+            env:
+            - name: PIXELFED_FEED_URL
+              value: https://pixelfed.social/users/lit.pictures.atom
+            - name: BRIDGE_AFTER
+              value: "2026-09-12T18:00:00+02:00"
+            - name: BLUESKY_HANDLE
+              valueFrom:
+                secretKeyRef:
+                  name: pixelfed-bs-bridge
+                  key: BLUESKY_HANDLE
+            - name: BLUESKY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pixelfed-bs-bridge
+                  key: BLUESKY_PASSWORD
+
