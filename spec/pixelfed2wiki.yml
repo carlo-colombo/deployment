@@ -81,7 +81,7 @@ spec:
             - name: PIXELFED_FEED_URL
               value: https://pixelfed.social/users/lit.pictures.atom
             - name: BRIDGE_AFTER
-              value: "2026-09-12T18:00:00+02:00"
+              value: "2026-01-01T00:00:00Z"
             - name: BLUESKY_HANDLE
               valueFrom:
                 secretKeyRef:
