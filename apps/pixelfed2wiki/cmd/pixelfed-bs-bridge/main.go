@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -159,7 +160,7 @@ func publish(ctx context.Context, c *xrpc.Client, post pixelfed.Post, canonical 
 	}
 	text := buildText(post.Caption, canonical)
 	created := post.Published.UTC().Format(time.RFC3339Nano)
-	record := &bsky.FeedPost{Text: text, CreatedAt: created, Embed: &bsky.FeedPost_Embed{EmbedImages: &bsky.EmbedImages{Images: func() []*bsky.EmbedImages_Image {
+	record := &bsky.FeedPost{Text: text, Facets: buildFacets(text), CreatedAt: created, Embed: &bsky.FeedPost_Embed{EmbedImages: &bsky.EmbedImages{Images: func() []*bsky.EmbedImages_Image {
 		out := make([]*bsky.EmbedImages_Image, len(refs))
 		for i, ref := range refs {
 			out[i] = &bsky.EmbedImages_Image{Image: ref.Image, Alt: ref.Alt}
@@ -172,6 +173,37 @@ func publish(ctx context.Context, c *xrpc.Client, post pixelfed.Post, canonical 
 	}
 	log.Printf("published Bluesky post for %s: uri=%s cid=%s images=%d", canonical, result.Uri, result.Cid, len(refs))
 	return nil
+}
+
+var (
+	urlPattern     = regexp.MustCompile(`https?://[^\s<>]+`)
+	hashtagPattern = regexp.MustCompile(`#(?:[\p{L}\p{N}_]+)`)
+	trailingPunct  = strings.TrimRight
+)
+
+func buildFacets(text string) []*bsky.RichtextFacet {
+	facets := make([]*bsky.RichtextFacet, 0)
+	add := func(start, end int, feature *bsky.RichtextFacet_Features_Elem) {
+		if start >= end {
+			return
+		}
+		facets = append(facets, &bsky.RichtextFacet{
+			Index:    &bsky.RichtextFacet_ByteSlice{ByteStart: int64(start), ByteEnd: int64(end)},
+			Features: []*bsky.RichtextFacet_Features_Elem{feature},
+		})
+	}
+	for _, match := range urlPattern.FindAllStringIndex(text, -1) {
+		end := match[1]
+		trimmed := trailingPunct(text[match[0]:end], `.,!?;:)\]}`)
+		end = match[0] + len(trimmed)
+		add(match[0], end, &bsky.RichtextFacet_Features_Elem{RichtextFacet_Link: &bsky.RichtextFacet_Link{Uri: text[match[0]:end]}})
+	}
+	for _, match := range hashtagPattern.FindAllStringIndex(text, -1) {
+		tag := text[match[0]+1 : match[1]]
+		feature := &bsky.RichtextFacet_Features_Elem{RichtextFacet_Tag: &bsky.RichtextFacet_Tag{Tag: tag}}
+		add(match[0], match[1], feature)
+	}
+	return facets
 }
 
 func buildText(caption, canonical string) string {
