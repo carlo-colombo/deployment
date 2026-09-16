@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -69,6 +70,9 @@ func main() {
 			log.Fatal(err)
 		}
 	}
+	sort.SliceStable(posts, func(i, j int) bool {
+		return posts[i].Published.Before(posts[j].Published)
+	})
 	for _, post := range posts {
 		if !post.Published.After(cutoff) {
 			continue
@@ -76,16 +80,16 @@ func main() {
 		canonical, err := pixelfed.CanonicalURL(post.URL)
 		if err != nil {
 			log.Printf("skip %q: %v", post.ID, err)
-			continue
+			return
 		}
 		if dryRun {
 			log.Printf("would bridge %s (%d images)", canonical, len(post.Images))
-			continue
+			return
 		}
 		exists, err := alreadyBridged(ctx, client, client.Auth.Did, canonical)
 		if err != nil {
 			log.Printf("check %s: %v", canonical, err)
-			continue
+			return
 		}
 		if exists {
 			log.Printf("skip existing %s", canonical)
@@ -94,6 +98,7 @@ func main() {
 		if err := publish(ctx, client, post, canonical, maxBytes); err != nil {
 			log.Printf("bridge %s: %v", canonical, err)
 		}
+		return
 	}
 }
 
