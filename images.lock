@@ -12,10 +12,10 @@ overrides:
   newImage: index.docker.io/grafana/grafana-oss@sha256:5dad0df181cb644a14e13617b913b261a54f7d4fd4510721dba420929f35bea2
   preresolved: true
 - image: pixelfed-bs-bridge
-  newImage: rg.nl-ams.scw.cloud/carlo-colombo/pixelfed-bs-bridge@sha256:b4a1e7ae0d48e7aeea1dcfad0b8c4cda4cef1527b6d07d7b0b0ebe263a6fab44
+  newImage: rg.nl-ams.scw.cloud/carlo-colombo/pixelfed-bs-bridge@sha256:13028104fb4fa6aa953a4ce176f8fd72641f31f42ad8587a5de9e1173251b507
   preresolved: true
 - image: pixelfed2wiki
-  newImage: rg.nl-ams.scw.cloud/carlo-colombo/pixelfed2wiki@sha256:73e41fd20dac169165a9ef143dbbc77326f912e1312019c26f390e822993ab22
+  newImage: rg.nl-ams.scw.cloud/carlo-colombo/pixelfed2wiki@sha256:aed631bfa664f87e703055ab1b1615ce2f402b2ccc7cb5552bfb97e238347050
   preresolved: true
 - image: python:3-alpine
   newImage: index.docker.io/library/python@sha256:c6ead215bfd31f1e433d968853b7a769989117115b728874824e6c0a27cb96fc

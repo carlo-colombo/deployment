@@ -41,10 +41,14 @@ type feedPost struct {
 }
 
 func main() {
-	feedURL := os.Getenv("PIXELFED_FEED_URL")
+	feedFile := os.Getenv("PIXELFED_FEED_FILE")
+	liveFeedURL := os.Getenv("PIXELFED_LIVE_FEED_URL")
+	if feedFile == "" || liveFeedURL == "" {
+		log.Fatal("PIXELFED_FEED_FILE and PIXELFED_LIVE_FEED_URL are required")
+	}
 	cutoff, err := time.Parse(time.RFC3339, os.Getenv("BRIDGE_AFTER"))
-	if feedURL == "" || err != nil {
-		log.Fatal("PIXELFED_FEED_URL and valid BRIDGE_AFTER are required")
+	if err != nil {
+		log.Fatal("valid BRIDGE_AFTER is required")
 	}
 	maxBytes := int64(4 << 20)
 	if value := os.Getenv("MAX_IMAGE_BYTES"); value != "" {
@@ -55,10 +59,15 @@ func main() {
 	}
 	dryRun := strings.EqualFold(os.Getenv("DRY_RUN"), "true")
 	ctx := context.Background()
-	posts, err := pixelfed.ParseURL(ctx, feedURL, nil)
+	staticPosts, err := pixelfed.ParseFile(feedFile)
 	if err != nil {
 		log.Fatal(err)
 	}
+	livePosts, err := pixelfed.ParseURL(ctx, liveFeedURL, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	posts := pixelfed.MergePosts(staticPosts, livePosts)
 	pds := os.Getenv("BLUESKY_PDS")
 	if pds == "" {
 		pds = "https://bsky.social"
