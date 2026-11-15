@@ -6,23 +6,23 @@ overrides:
   newImage: index.docker.io/library/alpine@sha256:d9e853e87e55526f6b2917df91a2115c36dd7c696a35be12163d44e6e2a4b6bc
   preresolved: true
 - image: caddy
-  newImage: index.docker.io/library/caddy@sha256:14a9c00d4e833ebc2b65d36515b37bde3b73f0b323a2663aaafc88953d8c4e3f
+  newImage: index.docker.io/library/caddy@sha256:4e2425f6009577e7c651010f16679c28f7d12df3e7b1914f941a7a3370746b3c
   preresolved: true
 - image: grafana/grafana-oss:latest
   newImage: index.docker.io/grafana/grafana-oss@sha256:5dad0df181cb644a14e13617b913b261a54f7d4fd4510721dba420929f35bea2
   preresolved: true
 - image: pixelfed-bs-bridge
-  newImage: rg.nl-ams.scw.cloud/carlo-colombo/pixelfed-bs-bridge@sha256:c52a2603535d0529767e06d682924b08a7934f00f0e6a833c45c75b36b6f4585
+  newImage: rg.nl-ams.scw.cloud/carlo-colombo/pixelfed-bs-bridge@sha256:c217a2a0794439890e13da18daad33accfc73f4a8f22df2f4381bdd5f63e7bce
   preresolved: true
 - image: pixelfed2wiki
-  newImage: rg.nl-ams.scw.cloud/carlo-colombo/pixelfed2wiki@sha256:4ee6288013ebe5179a6587ef3ffe5b803d8e7a5e522adb5d1e52d1c23fa7b2c0
+  newImage: rg.nl-ams.scw.cloud/carlo-colombo/pixelfed2wiki@sha256:56a3f49ad41d36ec6b3a4f8a43167434de35c97950a27207cc6693bfcc26a065
   preresolved: true
 - image: python:3-alpine
-  newImage: index.docker.io/library/python@sha256:016508ba505da24f7139765bc4bb669df4e88eb2f12eeadd571bf2f88d7533df
+  newImage: index.docker.io/library/python@sha256:0f9552bb28711333da16915ec146f5e6bb44a7fdac9ced15dc17c2e0206346dd
   preresolved: true
 - image: restic/restic:latest
   newImage: index.docker.io/restic/restic@sha256:9940e6c7421ab3a21ee9fdc4e91596d04c792b600d31b102696c75cbf3ac4481
   preresolved: true
 - image: tiddlywiki
-  newImage: rg.nl-ams.scw.cloud/carlo-colombo/tiddlywiki@sha256:b6a4600be18fe993da062645468526f9ddde91cad159581e066a3197d4080887
+  newImage: rg.nl-ams.scw.cloud/carlo-colombo/tiddlywiki@sha256:0c5c9cb3de3132d5db1f986e8cd96117278546c38aeb8892e14dc7f6c44a9476
   preresolved: true
