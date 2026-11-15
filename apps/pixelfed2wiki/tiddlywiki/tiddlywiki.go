@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 
 	"github.com/carlo-colombo/pixelfed2wiki/uploader"
 	"github.com/minio/minio-go/v7"
@@ -49,29 +50,45 @@ func (tc TiddlywikiClient) CreateIfNew(mc *minio.Client, tiddler Tiddler) error 
 	req = tc.decorateReq(req)
 
 	resp, err := tc.client.Do(req)
-
-	if err != nil || resp.StatusCode != 404 {
+	if err != nil {
+		return fmt.Errorf("failed to check whether tiddler exists: %w", err)
+	}
+	resp.Body.Close()
+	if resp.StatusCode != http.StatusNotFound {
+		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+			return fmt.Errorf("failed to check whether tiddler exists: %s", resp.Status)
+		}
 		fmt.Printf("(%d)skipping creation %s \n", resp.StatusCode, tiddler.Title)
 		return nil
 	}
 
-	uploader := uploader.NewUploader(
-		os.Getenv("UPLOAD_BUCKET"),
-		mc,
-		tiddler.imageBytes,
-	)
+	additionalImages := make([]string, 0, len(tiddler.media))
+	additionalThumbnails := make([]string, 0, len(tiddler.media))
+	for i, photo := range tiddler.media {
+		uploader := uploader.NewUploader(os.Getenv("UPLOAD_BUCKET"), mc, photo.data)
+		if uploader.Err != nil {
+			return fmt.Errorf("failed to prepare photo %d (%s) for post %q: %w", i+1, photo.source, tiddler.Title, uploader.Err)
+		}
 
-	if uploader.Err != nil {
-		return fmt.Errorf("failed to instantiate uploader: %w", uploader.Err)
+		imageURL, err := uploader.UploadImage()
+		if err != nil {
+			return fmt.Errorf("failed to upload photo %d (%s) for post %q: %w", i+1, photo.source, tiddler.Title, err)
+		}
+		thumbnailURL, err := uploader.UploadThumbnail()
+		if err != nil {
+			return fmt.Errorf("failed to upload thumbnail for photo %d (%s) in post %q: %w", i+1, photo.source, tiddler.Title, err)
+		}
+
+		if i == 0 {
+			tiddler.Image = imageURL
+			tiddler.Thumbnail = thumbnailURL
+		} else {
+			additionalImages = append(additionalImages, imageURL)
+			additionalThumbnails = append(additionalThumbnails, thumbnailURL)
+		}
 	}
-
-	tiddler = tiddler.
-		UploadAndSetImage(uploader).
-		UploadAndSetThumbnail(uploader)
-
-	if tiddler.Err != nil {
-		return fmt.Errorf("failed to finalize tiddler: %w", tiddler.Err)
-	}
+	tiddler.AdditionalImages = strings.Join(additionalImages, " ")
+	tiddler.AdditionalThumbnails = strings.Join(additionalThumbnails, " ")
 
 	tjson, err := json.Marshal(tiddler)
 

@@ -11,6 +11,8 @@ import (
 	"image/png"
 	"io"
 	"net/http"
+	"os"
+	"strings"
 
 	"github.com/minio/minio-go/v7"
 	"github.com/nfnt/resize"
@@ -64,6 +66,9 @@ func (u *Uploader) UploadImage() (string, error) {
 }
 
 func (u Uploader) getPublicBucketUrl() string {
+	if publicBaseURL := os.Getenv("S3_PUBLIC_BASE_URL"); publicBaseURL != "" {
+		return strings.TrimRight(publicBaseURL, "/")
+	}
 	bucketUrl := *u.mc.EndpointURL()
 	bucketUrl.Host = u.bucket + "." + bucketUrl.Host
 	return bucketUrl.String()
