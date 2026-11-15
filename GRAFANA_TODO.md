@@ -28,9 +28,7 @@ Track progress on deploying the Grafana/SQLite blog stats stack (see `GRAFANA_PL
 - [x] Cleaned up leftover test datasources and stray debug db files in `/data/stats`.
 
 ## Active / notes
-- **deploy.sh git-crypt unlock**: fails with "Working directory not clean" whenever
-  there are uncommitted changes. The pipeline must be run directly (bypassing the
-  unlock) or the tree must be committed/stashed first. Not addressed in this session.
+- **Bitwarden credentials:** `deploy.sh` now requires `BITWARDEN_CREDS_ITEM_ID` and an unlocked Bitwarden CLI session (`BW_SESSION`). Configure those before running a full deploy.
 - **Grafana version**: running `grafana/grafana-oss:latest` (13.0.2) per decision to
   stay on `latest`. Spec updated to match.
 
@@ -43,7 +41,6 @@ Track progress on deploying the Grafana/SQLite blog stats stack (see `GRAFANA_PL
 - [x] `https://stats.blog.litapp.ovh` -> basicauth -> read-only Grafana dashboard.
 
 ## Follow-ups
-- [ ] Run a full `./deploy.sh` once the tree is clean (committed) to keep the
-      git-crypt unlock path working and confirm no drift.
+- [ ] Run a full `./deploy.sh` with `BITWARDEN_CREDS_ITEM_ID` and `BW_SESSION` configured to confirm no drift.
 - [ ] Commit the spec/`images.lock` changes and the `GRAFANA_PLAN.md`/`GRAFANA_TODO.md`
       notes when ready.

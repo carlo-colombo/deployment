@@ -27,7 +27,7 @@ Replace GoAccess with a self-hosted, low-maintenance Grafana stack that reads Ca
 5. **ConfigMaps**: `grafana-datasources` (provisioned SQLite datasource, uid `sqlite`), `grafana-dashboards` (file provider), `grafana-dashboard-json` (the read-only dashboard).
 
 ## Config
-`spec/values.yml` gained `blog.stats.grafana_password`; the real value is supplied via `.creds.yml` (git-crypt encrypted).
+`spec/values.yml` gained `blog.stats.grafana_password`; the real value is supplied from the Bitwarden Secure Note selected by `BITWARDEN_CREDS_ITEM_ID`.
 
 ## Verification
 1. `./deploy.sh` -> blog pod rolls with Caddy + Grafana sidecar; `load-stats` CronJob created.
