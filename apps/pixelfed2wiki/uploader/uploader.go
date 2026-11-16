@@ -74,45 +74,51 @@ func (u Uploader) getPublicBucketUrl() string {
 	return bucketUrl.String()
 }
 
-func (u *Uploader) UploadThumbnail() (string, error) {
+func (u *Uploader) UploadThumbnail() (string, int, int, error) {
 	if u.Err != nil {
-		return "", u.Err
+		return "", 0, 0, u.Err
 	}
 
-	var img image.Image
-	var err error
-
-	switch u.mimeType {
-	case "image/png":
-		img, err = png.Decode(bytes.NewReader(u.imageBytes))
-	case "image/jpeg":
-		img, err = jpeg.Decode(bytes.NewReader(u.imageBytes))
-	default:
-		err = fmt.Errorf("mimetype not recognized %s", u.mimeType)
-	}
-
+	thumbnailBytes, width, height, err := makeThumbnail(u.imageBytes, u.mimeType)
 	if err != nil {
-		return "", fmt.Errorf("failed decoding image: %w", err)
-	}
-
-	thumb := resize.Thumbnail(360, 360, img, resize.Lanczos2)
-
-	buf := bytes.NewBuffer([]byte{})
-
-	err = jpeg.Encode(buf, thumb, nil)
-
-	if err != nil {
-		return "", fmt.Errorf("failed encoding thumb: %w", err)
+		return "", 0, 0, err
 	}
 
 	info, err := u.mc.PutObject(context.TODO(), u.bucket, "thumbs/"+u.imageName,
-		buf, int64(buf.Len()), minio.PutObjectOptions{
+		bytes.NewReader(thumbnailBytes), int64(len(thumbnailBytes)), minio.PutObjectOptions{
 			CacheControl: "max-age=604800, must-revalidate",
 		})
 
 	if err != nil {
-		return "", fmt.Errorf("cannot upload thumbnail: %w", err)
+		return "", 0, 0, fmt.Errorf("cannot upload thumbnail: %w", err)
 	}
 
-	return fmt.Sprintf("%s/%s", u.getPublicBucketUrl(), info.Key), nil
+	return fmt.Sprintf("%s/%s", u.getPublicBucketUrl(), info.Key), width, height, nil
+}
+
+func makeThumbnail(imageBytes []byte, mimeType string) ([]byte, int, int, error) {
+	var img image.Image
+	var err error
+
+	switch mimeType {
+	case "image/png":
+		img, err = png.Decode(bytes.NewReader(imageBytes))
+	case "image/jpeg":
+		img, err = jpeg.Decode(bytes.NewReader(imageBytes))
+	default:
+		err = fmt.Errorf("mimetype not recognized %s", mimeType)
+	}
+
+	if err != nil {
+		return nil, 0, 0, fmt.Errorf("failed decoding image: %w", err)
+	}
+
+	thumbnail := resize.Thumbnail(360, 360, img, resize.Lanczos2)
+	buffer := bytes.NewBuffer(nil)
+	if err := jpeg.Encode(buffer, thumbnail, nil); err != nil {
+		return nil, 0, 0, fmt.Errorf("failed encoding thumb: %w", err)
+	}
+
+	bounds := thumbnail.Bounds()
+	return buffer.Bytes(), bounds.Dx(), bounds.Dy(), nil
 }

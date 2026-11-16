@@ -14,20 +14,24 @@ import (
 )
 
 type Tiddler struct {
-	Title                string `json:"title"`
-	Tags                 string `json:"tags"`
-	Text                 string `json:"text"`
-	Pixelfed             string `json:"pixelfed"`
-	Published            string `json:"published"`
-	Image                string `json:"image"`
-	Description          string `json:"description"`
-	Thumbnail            string `json:"thumbnail"`
-	AdditionalImages     string `json:"additional-images,omitempty"`
-	AdditionalThumbnails string `json:"additional-thumbnails,omitempty"`
-	item                 gofeed.Item
-	Err                  error `json:"-"`
-	doc                  *goquery.Document
-	media                []photoAsset
+	Title                      string `json:"title"`
+	Tags                       string `json:"tags"`
+	Text                       string `json:"text"`
+	Pixelfed                   string `json:"pixelfed"`
+	Published                  string `json:"published"`
+	Image                      string `json:"image"`
+	Description                string `json:"description"`
+	Thumbnail                  string `json:"thumbnail"`
+	ThumbnailWidth             string `json:"thumbnail-width,omitempty"`
+	ThumbnailHeight            string `json:"thumbnail-height,omitempty"`
+	AdditionalImages           string `json:"additional-images,omitempty"`
+	AdditionalThumbnails       string `json:"additional-thumbnails,omitempty"`
+	AdditionalThumbnailWidths  string `json:"additional-thumbnail-widths,omitempty"`
+	AdditionalThumbnailHeights string `json:"additional-thumbnail-heights,omitempty"`
+	item                       gofeed.Item
+	Err                        error `json:"-"`
+	doc                        *goquery.Document
+	media                      []photoAsset
 }
 
 type photoAsset struct {

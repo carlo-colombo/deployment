@@ -1,6 +1,7 @@
 package tiddlywiki
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -27,6 +28,33 @@ func fixtureItem(title, content string) gofeed.Item {
 		Content:   content,
 		Link:      "https://pixelfed.example/p/account/123",
 		Published: "2026-01-02T03:04:05Z",
+	}
+}
+
+func TestThumbnailDimensionsUseTiddlyWikiFieldNames(t *testing.T) {
+	encoded, err := json.Marshal(Tiddler{
+		ThumbnailWidth:             "360",
+		ThumbnailHeight:            "240",
+		AdditionalThumbnailWidths:  "360 180",
+		AdditionalThumbnailHeights: "240 360",
+	})
+	if err != nil {
+		t.Fatalf("marshal tiddler: %v", err)
+	}
+
+	var fields map[string]string
+	if err := json.Unmarshal(encoded, &fields); err != nil {
+		t.Fatalf("unmarshal tiddler fields: %v", err)
+	}
+	for field, want := range map[string]string{
+		"thumbnail-width":              "360",
+		"thumbnail-height":             "240",
+		"additional-thumbnail-widths":  "360 180",
+		"additional-thumbnail-heights": "240 360",
+	} {
+		if fields[field] != want {
+			t.Errorf("%s = %q, want %q", field, fields[field], want)
+		}
 	}
 }
 

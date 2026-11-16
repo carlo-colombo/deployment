@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/carlo-colombo/pixelfed2wiki/uploader"
@@ -64,6 +65,8 @@ func (tc TiddlywikiClient) CreateIfNew(mc *minio.Client, tiddler Tiddler) error 
 
 	additionalImages := make([]string, 0, len(tiddler.media))
 	additionalThumbnails := make([]string, 0, len(tiddler.media))
+	additionalThumbnailWidths := make([]string, 0, len(tiddler.media))
+	additionalThumbnailHeights := make([]string, 0, len(tiddler.media))
 	for i, photo := range tiddler.media {
 		uploader := uploader.NewUploader(os.Getenv("UPLOAD_BUCKET"), mc, photo.data)
 		if uploader.Err != nil {
@@ -74,7 +77,7 @@ func (tc TiddlywikiClient) CreateIfNew(mc *minio.Client, tiddler Tiddler) error 
 		if err != nil {
 			return fmt.Errorf("failed to upload photo %d (%s) for post %q: %w", i+1, photo.source, tiddler.Title, err)
 		}
-		thumbnailURL, err := uploader.UploadThumbnail()
+		thumbnailURL, thumbnailWidth, thumbnailHeight, err := uploader.UploadThumbnail()
 		if err != nil {
 			return fmt.Errorf("failed to upload thumbnail for photo %d (%s) in post %q: %w", i+1, photo.source, tiddler.Title, err)
 		}
@@ -82,13 +85,19 @@ func (tc TiddlywikiClient) CreateIfNew(mc *minio.Client, tiddler Tiddler) error 
 		if i == 0 {
 			tiddler.Image = imageURL
 			tiddler.Thumbnail = thumbnailURL
+			tiddler.ThumbnailWidth = strconv.Itoa(thumbnailWidth)
+			tiddler.ThumbnailHeight = strconv.Itoa(thumbnailHeight)
 		} else {
 			additionalImages = append(additionalImages, imageURL)
 			additionalThumbnails = append(additionalThumbnails, thumbnailURL)
+			additionalThumbnailWidths = append(additionalThumbnailWidths, strconv.Itoa(thumbnailWidth))
+			additionalThumbnailHeights = append(additionalThumbnailHeights, strconv.Itoa(thumbnailHeight))
 		}
 	}
 	tiddler.AdditionalImages = strings.Join(additionalImages, " ")
 	tiddler.AdditionalThumbnails = strings.Join(additionalThumbnails, " ")
+	tiddler.AdditionalThumbnailWidths = strings.Join(additionalThumbnailWidths, " ")
+	tiddler.AdditionalThumbnailHeights = strings.Join(additionalThumbnailHeights, " ")
 
 	tjson, err := json.Marshal(tiddler)
 
