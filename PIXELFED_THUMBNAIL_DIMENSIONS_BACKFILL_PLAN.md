@@ -2,19 +2,28 @@
 
 ## Goal and safety boundary
 
-Backfill actual resized-thumbnail dimensions on existing Pixelfed picture tiddlers so gallery images can retain their natural proportions while the browser reserves space before lazy loading. This is a plan only: **no real wiki instance was queried or changed**, and no deployment is authorized by this document.
+Backfill actual resized-thumbnail dimensions on existing Pixelfed picture tiddlers so gallery images can retain their natural proportions while the browser reserves space before lazy loading. **No live tiddlers have been changed.** A read-only inventory and dry run completed; applying the reported updates still requires operator approval.
 
-The importer now writes these TiddlyWiki string fields for newly created posts:
+The importer now writes these TiddlyWiki string fields for newly created posts. The one-shot maintenance command is implemented at `apps/pixelfed2wiki/cmd/pixelfed-thumbnail-backfill`:
 
 - `thumbnail-width`, `thumbnail-height`: dimensions of the primary uploaded thumbnail.
 - `additional-thumbnail-widths`, `additional-thumbnail-heights`: space-separated dimensions aligned by index with `additional-thumbnails`.
 
 Use dimensions of the thumbnail bytes stored under `thumbs/`, not dimensions of the original image. The importer resizes thumbnails to fit within 360 × 360 while preserving aspect ratio.
 
+## Read-only dry-run result
+
+- Exported 998 non-system tiddlers and found 166 eligible published Pixelfed tiddlers.
+- Measured 170 primary/additional thumbnail references across the allowed image hosts.
+- 166 tiddlers need dimension fields; 0 measurement or validation errors were reported.
+- The pre-migration export was loaded into an isolated TiddlyWiki test folder; all 166 Pixelfed tiddlers were re-serialized successfully. Applying the proposed dimensions to that copy and rebuilding it visually remains a pre-write check.
+- A private pre-migration export and JSON report are stored under `/tmp` in the current workstation session. They are not committed.
+- No production writes or deployment have occurred. Review the dry-run report and confirm the production write window before applying updates.
+
 ## Backfill procedure
 
-1. **Prepare a maintenance command.** Implement a one-shot tool separate from the scheduled importer. Make dry-run the default; require an explicit `--apply` flag to write. Restrict image downloads to the configured public object-storage host, enforce timeouts and response-size limits, and use low bounded concurrency.
-2. **Back up and inventory the real wiki.** Export eligible published `pixelfed` tiddlers and create a restorable wiki backup. Record the eligible-tiddler count, existing size fields, and number of primary/additional thumbnail URLs. Keep backups and reports securely; never include credentials.
+1. **Maintenance command implemented.** `cmd/pixelfed-thumbnail-backfill` defaults to read-only reporting, requires `--apply --confirm-live-write` for updates, restricts thumbnail requests to explicit HTTPS host allowlists, and enforces timeouts and response-size limits.
+2. **Back up and inventory the real wiki.** A private full non-system-tiddler export including text was saved before the dry run; it is outside the repository. Retain it securely and confirm the restore check before production writes. The inventory found 166 eligible published `pixelfed` tiddlers. Record the eligible-tiddler count, existing size fields, and number of primary/additional thumbnail URLs. Keep backups and reports securely; never include credentials.
 3. **Run a read-only dry run.** For each tiddler, inspect its `thumbnail` and each URL in `additional-thumbnails` using image decoding/config inspection. Produce a report keyed by title with proposed dimensions, skipped fields, and decode/URL errors. Do not overwrite non-empty values silently.
 4. **Validate against a copy first.** Apply the report to a restored test copy. Build the static blog and inspect landscape, portrait, square, and multi-photo pages. Confirm each emitted `width`/`height` pair matches the corresponding thumbnail and that the gallery keeps natural masonry proportions.
 5. **Apply to production in checkpoints.** After reviewing the report, backup, and rollback point, update only missing dimension fields in small batches (for example, 50 tiddlers per batch). Record completed titles so the operation is resumable. Do not use `CreateIfNew` for this step; it intentionally skips existing tiddlers.
