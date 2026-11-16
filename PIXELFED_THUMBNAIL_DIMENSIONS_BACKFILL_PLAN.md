@@ -18,7 +18,7 @@ Use dimensions of the thumbnail bytes stored under `thumbs/`, not dimensions of 
 - Restored the pre-migration export into an isolated TiddlyWiki copy, applied all 166 updates there, and rebuilt the static blog; all 177 image elements in that gallery had width/height attributes.
 - After operator approval, applied the production updates in four batches (50, 50, 50, 16). No batch errors occurred.
 - A final read-only verification found 166 complete tiddlers, 0 pending updates, and 0 errors.
-- Updated the five live gallery/home/page templates and regenerated the static blog. The live gallery now has dimensions on 167/167 image tags; the photography tag page has dimensions on 105/105.
+- Updated the five live gallery/home/page templates and regenerated the static blog with job `update-blog-thumbnail-dimensions-fix-203156`. The live gallery now has dimensions on 167/167 image tags; the photography tag page has dimensions on 105/105, with no template-widget artifacts.
 - Private pre-migration and per-batch exports plus the JSON dry-run report are stored under `/tmp` with mode `0600`. No credentials are included.
 
 ## Backfill procedure
