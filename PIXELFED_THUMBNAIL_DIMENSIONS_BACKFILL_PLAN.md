@@ -2,7 +2,7 @@
 
 ## Goal and safety boundary
 
-Backfill actual resized-thumbnail dimensions on existing Pixelfed picture tiddlers so gallery images can retain their natural proportions while the browser reserves space before lazy loading. **No live tiddlers have been changed.** A read-only inventory and dry run completed; applying the reported updates still requires operator approval.
+Backfill actual resized-thumbnail dimensions on existing Pixelfed picture tiddlers so gallery images can retain their natural proportions while the browser reserves space before lazy loading. Live changes were applied only after the operator approved the dry-run scope and confirmed other backups were available.
 
 The importer now writes these TiddlyWiki string fields for newly created posts. The one-shot maintenance command is implemented at `apps/pixelfed2wiki/cmd/pixelfed-thumbnail-backfill`:
 
@@ -11,14 +11,15 @@ The importer now writes these TiddlyWiki string fields for newly created posts. 
 
 Use dimensions of the thumbnail bytes stored under `thumbs/`, not dimensions of the original image. The importer resizes thumbnails to fit within 360 × 360 while preserving aspect ratio.
 
-## Read-only dry-run result
+## Run results
 
 - Exported 998 non-system tiddlers and found 166 eligible published Pixelfed tiddlers.
-- Measured 170 primary/additional thumbnail references across the allowed image hosts.
-- 166 tiddlers need dimension fields; 0 measurement or validation errors were reported.
-- The pre-migration export was loaded into an isolated TiddlyWiki copy. The dry-run changes were applied to all 166 Pixelfed tiddlers in that copy, then the static blog was rebuilt; all 177 gallery image elements had matching width/height attributes.
-- A private pre-migration export and JSON report are stored under `/tmp` in the current workstation session. They are not committed.
-- No production writes or deployment have occurred. Review the dry-run report and confirm the production write window before applying updates.
+- Measured 170 primary/additional thumbnail references across five allowlisted image hosts. The dry run reported 166 updates and 0 errors.
+- Restored the pre-migration export into an isolated TiddlyWiki copy, applied all 166 updates there, and rebuilt the static blog; all 177 image elements in that gallery had width/height attributes.
+- After operator approval, applied the production updates in four batches (50, 50, 50, 16). No batch errors occurred.
+- A final read-only verification found 166 complete tiddlers, 0 pending updates, and 0 errors.
+- Updated the five live gallery/home/page templates and regenerated the static blog. The live gallery now has dimensions on 167/167 image tags; the photography tag page has dimensions on 105/105.
+- Private pre-migration and per-batch exports plus the JSON dry-run report are stored under `/tmp` with mode `0600`. No credentials are included.
 
 ## Backfill procedure
 
@@ -33,10 +34,10 @@ Use dimensions of the thumbnail bytes stored under `thumbs/`, not dimensions of 
 
 The backfill only adds metadata and does not change image URLs. If verification fails, restore the pre-migration wiki backup or remove the four dimension fields from the recorded affected titles, then rebuild and verify the prior gallery output.
 
-## Go/no-go checks
+## Completed safety checks
 
-- Backup restore and the complete dimension migration have been tested on a non-production copy.
-- Dry-run has no unexplained URL-host or image-decode errors.
-- Existing non-empty dimensions are not silently replaced.
-- Additional-thumbnail width/height counts match the additional-thumbnail URL count.
-- An operator explicitly approves the real-instance write window and rollback point.
+- The backup export restored into a non-production TiddlyWiki copy; the dimension changes applied and the static rendering check passed.
+- The dry run reported no URL-host or image-decode errors.
+- Existing non-empty dimensions were not silently replaced.
+- Additional-thumbnail dimension counts matched their URL counts.
+- The operator approved the production batch writes; the rollback exports were retained outside the repository.
