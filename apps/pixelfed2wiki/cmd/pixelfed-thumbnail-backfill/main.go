@@ -432,84 +432,76 @@ func (bf *backfiller) measure(imageURL string) (dimensions, string, error) {
 	return result, host, nil
 }
 
-func (bf *backfiller) getTiddler(title string) (tiddler, error) {
-	endpoint := strings.TrimRight(bf.wikiURL.String(), "/") + "/recipes/default/tiddlers/" + url.PathEscape(title)
-	request, err := http.NewRequest(http.MethodGet, endpoint, nil)
-	if err != nil {
-		return nil, fmt.Errorf("create request for tiddler %q: %w", title, err)
-	}
-	request.SetBasicAuth(bf.username, bf.password)
-	response, err := bf.client.Do(request)
-	if err != nil {
-		return nil, fmt.Errorf("read current tiddler %q: %w", title, err)
-	}
-	defer response.Body.Close()
-	if response.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("read current tiddler %q returned %s", title, response.Status)
-	}
-	data, err := io.ReadAll(io.LimitReader(response.Body, 32<<20))
-	if err != nil {
-		return nil, fmt.Errorf("read response for tiddler %q: %w", title, err)
-	}
-	var current tiddler
-	if err := json.Unmarshal(data, &current); err != nil {
-		return nil, fmt.Errorf("decode current tiddler %q: %w", title, err)
-	}
-	return current, nil
-}
-
 func (bf *backfiller) applyChanges(items []tiddler, pending map[string]map[string]string, limit int) (int, error) {
-	applied := 0
-	for _, item := range items {
-		title := getString(item, "title")
+	latest, _, err := bf.getAllTiddlers()
+	if err != nil {
+		return 0, fmt.Errorf("refresh tiddlers before apply: %w", err)
+	}
+	latestByTitle := make(map[string]tiddler, len(latest))
+	for _, item := range latest {
+		latestByTitle[getString(item, "title")] = item
+	}
+
+	type update struct {
+		title string
+		item  tiddler
+	}
+	updates := make([]update, 0, limit)
+	for _, original := range items {
+		title := getString(original, "title")
 		changes := pending[title]
 		if len(changes) == 0 {
 			continue
 		}
-		if applied >= limit {
-			break
-		}
-		current, err := bf.getTiddler(title)
-		if err != nil {
-			return applied, err
+		current, ok := latestByTitle[title]
+		if !ok {
+			return 0, fmt.Errorf("tiddler %q disappeared after inventory; rerun the dry run", title)
 		}
 		for _, field := range []string{"pixelfed", "published", "thumbnail", "image", "additional-thumbnails"} {
-			if getString(current, field) != getString(item, field) {
-				return applied, fmt.Errorf("tiddler %q changed after inventory; stop and rerun the dry run", title)
+			if getString(current, field) != getString(original, field) {
+				return 0, fmt.Errorf("tiddler %q field %s changed after inventory; rerun the dry run", title, field)
 			}
 		}
 		for field, value := range changes {
 			existing, exists, err := fieldString(current, field)
 			if err != nil {
-				return applied, fmt.Errorf("tiddler %q field %s is not a string; stop and review manually", title, field)
+				return 0, fmt.Errorf("tiddler %q field %s is not a string; review manually", title, field)
 			}
 			if exists && existing != "" {
 				if existing != value {
-					return applied, fmt.Errorf("tiddler %q field %s changed after inventory; stop and rerun the dry run", title, field)
+					return 0, fmt.Errorf("tiddler %q field %s changed after inventory; rerun the dry run", title, field)
 				}
 				continue
 			}
 			current[field], _ = json.Marshal(value)
 		}
-		body, err := json.Marshal(current)
-		if err != nil {
-			return applied, fmt.Errorf("marshal tiddler %q: %w", title, err)
+		updates = append(updates, update{title: title, item: current})
+		if len(updates) >= limit {
+			break
 		}
-		endpoint := strings.TrimRight(bf.wikiURL.String(), "/") + "/recipes/default/tiddlers/" + url.PathEscape(title)
+	}
+
+	applied := 0
+	for _, update := range updates {
+		body, err := json.Marshal(update.item)
+		if err != nil {
+			return applied, fmt.Errorf("marshal tiddler %q: %w", update.title, err)
+		}
+		endpoint := strings.TrimRight(bf.wikiURL.String(), "/") + "/recipes/default/tiddlers/" + url.PathEscape(update.title)
 		request, err := http.NewRequest(http.MethodPut, endpoint, bytes.NewReader(body))
 		if err != nil {
-			return applied, fmt.Errorf("create update request for %q: %w", title, err)
+			return applied, fmt.Errorf("create update request for %q: %w", update.title, err)
 		}
 		request.Header.Set("x-requested-with", "TiddlyWiki")
 		request.Header.Set("Content-Type", "application/json")
 		request.SetBasicAuth(bf.username, bf.password)
 		response, err := bf.client.Do(request)
 		if err != nil {
-			return applied, fmt.Errorf("update tiddler %q: %w", title, err)
+			return applied, fmt.Errorf("update tiddler %q: %w", update.title, err)
 		}
 		response.Body.Close()
 		if response.StatusCode != http.StatusNoContent {
-			return applied, fmt.Errorf("update tiddler %q returned %s", title, response.Status)
+			return applied, fmt.Errorf("update tiddler %q returned %s", update.title, response.Status)
 		}
 		applied++
 	}
